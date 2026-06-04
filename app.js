@@ -5,46 +5,46 @@ let dataSourceName = "products.csv";
 
 const procurementPlatforms = [
   {
-    name: "52华强北",
-    url: "https://52hqb.com/list/new?key=IPHONE+17",
-    displayUrl: "52hqb.com",
+    name: "Noon",
+    url: "https://www.noon.com/saudi-en/search/?q=phone%20case",
+    displayUrl: "noon.com/saudi-en",
     image: "images/case-magsafe.svg",
-    desc: "你的主要货源池，适合查找 iPhone / Samsung 新款手机壳批发款。"
+    desc: "沙特本地常用电商平台，适合对比畅销款和本地零售价格。"
   },
   {
-    name: "1688",
-    url: "https://s.1688.com/selloffer/offer_search.htm?keywords=%CA%D6%BB%FA%BF%C7",
-    displayUrl: "1688.com",
+    name: "Amazon.sa",
+    url: "https://www.amazon.sa/s?k=phone+case",
+    displayUrl: "amazon.sa",
     image: "images/case-clear.svg",
-    desc: "中国批发采购平台，适合找低成本透明壳、防摔壳、套装款。"
+    desc: "客户熟悉的沙特购物网站，适合查看品牌款、MagSafe、防摔壳价格。"
   },
   {
-    name: "AliExpress",
-    url: "https://www.aliexpress.com/wholesale?SearchText=phone+case",
-    displayUrl: "aliexpress.com",
+    name: "SHEIN",
+    url: "https://ar.shein.com/pdsearch/phone%20case/",
+    displayUrl: "ar.shein.com",
     image: "images/case-fashion.svg",
-    desc: "跨境零售和小批量采购参考，适合看国际价格和图片风格。"
+    desc: "沙特年轻客户常用平台，适合对比时尚款、透明款和低价款。"
   },
   {
-    name: "Alibaba",
-    url: "https://www.alibaba.com/trade/search?SearchText=phone+case",
-    displayUrl: "alibaba.com",
+    name: "Jarir",
+    url: "https://www.jarir.com/sa-en/catalogsearch/result/?q=phone%20case",
+    displayUrl: "jarir.com",
     image: "images/case-armor.svg",
-    desc: "适合找工厂、定制包装、ODM/OEM 手机壳供应商。"
+    desc: "沙特知名电子产品零售商，适合参考高客单价配件价格。"
   },
   {
-    name: "DHgate",
-    url: "https://www.dhgate.com/wholesale/search.do?searchkey=phone+case",
-    displayUrl: "dhgate.com",
+    name: "Extra",
+    url: "https://www.extra.com/en-sa/search/?text=phone%20case",
+    displayUrl: "extra.com",
     image: "images/case-silicone.svg",
-    desc: "适合查看小批量跨境供货价格和热卖款式。"
+    desc: "沙特大型电子零售平台，适合对比手机配件零售价格。"
   },
   {
-    name: "Made-in-China",
-    url: "https://www.made-in-china.com/products-search/hot-china-products/Phone_Case.html",
-    displayUrl: "made-in-china.com",
+    name: "Virgin Megastore",
+    url: "https://www.virginmegastore.sa/en/search/?q=phone%20case",
+    displayUrl: "virginmegastore.sa",
     image: "images/case-magsafe.svg",
-    desc: "适合寻找工厂型供应商和出口手机壳产品目录。"
+    desc: "沙特常见电子和生活方式零售平台，适合参考手机配件价格。"
   }
 ];
 
@@ -128,10 +128,29 @@ function hydrateProduct(row) {
 }
 
 function siteClass(site) {
+  if (site === "52hqb") return "source";
   if (site === "Noon") return "noon";
   if (site === "SHEIN") return "shein";
   if (site === "Amazon.sa") return "amazon";
   return "source";
+}
+
+function publicSiteName(site) {
+  return site === "52hqb" ? "我们的报价" : site;
+}
+
+function publicDisplayUrl(item) {
+  return item.site === "52hqb" ? "自有渠道报价" : item.displayUrl;
+}
+
+function publicDesc(item) {
+  if (item.site !== "52hqb") return item.desc;
+  return item.desc.replace(/^52hqb/, "我们的报价");
+}
+
+function publicTitle(item) {
+  if (item.site !== "52hqb") return item.title;
+  return item.title.replace(/^52hqb\s+/i, "自有渠道 ");
 }
 
 async function loadProducts() {
@@ -203,15 +222,25 @@ function priceSummary(items) {
 }
 
 function renderItem(item) {
+  const title = publicTitle(item);
+  const titleMarkup = item.site === "52hqb"
+    ? `<span class="result-title-text">${title}</span>`
+    : `<a href="${item.url}" target="_blank" rel="noreferrer">${title}</a>`;
+  const imageMarkup = item.site === "52hqb"
+    ? `<div class="thumb image-thumb" aria-label="${title}">
+        <img src="${item.imageUrl}" alt="${title}" loading="lazy">
+      </div>`
+    : `<a class="thumb image-thumb" href="${item.url}" target="_blank" rel="noreferrer" aria-label="${title}">
+        <img src="${item.imageUrl}" alt="${title}" loading="lazy">
+      </a>`;
+
   return `
     <article class="result-item">
-      <a class="thumb image-thumb" href="${item.url}" target="_blank" rel="noreferrer" aria-label="${item.title}">
-        <img src="${item.imageUrl}" alt="${item.title}" loading="lazy">
-      </a>
+      ${imageMarkup}
       <div class="result-copy">
-        <a href="${item.url}" target="_blank" rel="noreferrer">${item.title}</a>
-        <p class="url">${item.displayUrl}</p>
-        <p class="desc">${item.desc}</p>
+        ${titleMarkup}
+        <p class="url">${publicDisplayUrl(item)}</p>
+        <p class="desc">${publicDesc(item)}</p>
         <div class="tags">${item.tags.slice(0, 5).map((tag) => `<span class="tag">${tag}</span>`).join("")}</div>
       </div>
       <div class="price">
@@ -239,7 +268,7 @@ function renderResults(query, items) {
       <div class="site-head">
         <div class="site-title">
           <span class="site-dot ${group.items[0].siteClass}"></span>
-          <h2>${group.site}</h2>
+          <h2>${publicSiteName(group.site)}</h2>
         </div>
         <p class="site-summary">${group.items.length} 个结果 · 价格 ${priceSummary(group.items)}</p>
       </div>

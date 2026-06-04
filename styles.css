@@ -438,7 +438,8 @@ p {
   min-width: 0;
 }
 
-.result-copy a {
+.result-copy a,
+.result-title-text {
   display: inline-block;
   max-width: 100%;
   overflow: hidden;
