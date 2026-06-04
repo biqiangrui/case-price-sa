@@ -52,6 +52,14 @@ const procurementPlatforms = [
   }
 ];
 
+const matchTypes = [
+  { label: "MagSafe 磁吸款", words: ["magsafe", "magnetic"] },
+  { label: "透明防黄款", words: ["clear", "transparent", "anti", "yellow"] },
+  { label: "防摔保护款", words: ["armor", "shockproof", "military", "heavy"] },
+  { label: "支架功能款", words: ["kickstand", "stand"] },
+  { label: "时尚图案款", words: ["fashion", "cute", "pattern", "colorful", "glitter"] }
+];
+
 const app = document.querySelector("#app");
 const searchForm = document.querySelector("#searchForm");
 const searchInput = document.querySelector("#searchInput");
@@ -63,6 +71,7 @@ const resultTitle = document.querySelector("#resultTitle");
 const resultMeta = document.querySelector("#resultMeta");
 const priceInsights = document.querySelector("#priceInsights");
 const dataTrust = document.querySelector("#dataTrust");
+const matchCompare = document.querySelector("#matchCompare");
 const filterTabs = document.querySelector("#filterTabs");
 const sortSelect = document.querySelector("#sortSelect");
 const siteResults = document.querySelector("#siteResults");
@@ -354,6 +363,64 @@ function renderDataTrust(items) {
   `;
 }
 
+function itemMatchesType(item, type) {
+  const text = normalize(`${item.title} ${item.tags.join(" ")}`);
+  return type.words.some((word) => text.includes(word));
+}
+
+function lowestBySite(items) {
+  return items.reduce((best, item) => {
+    const current = best[item.site];
+    if (!current || item.price < current.price) best[item.site] = item;
+    return best;
+  }, {});
+}
+
+function renderMatchCompare(items) {
+  const rows = matchTypes.map((type) => {
+    const matches = items.filter((item) => itemMatchesType(item, type));
+    return {
+      type,
+      count: matches.length,
+      bySite: lowestBySite(matches)
+    };
+  }).filter((row) => row.count >= 2);
+
+  if (!rows.length) {
+    matchCompare.innerHTML = "";
+    return;
+  }
+
+  const columns = siteOrder.filter((site) => rows.some((row) => row.bySite[site]));
+  matchCompare.innerHTML = `
+    <div class="compare-head">
+      <div>
+        <h2>同类款式对比</h2>
+        <p>按款式聚合同类手机壳，显示每个平台当前最低价。</p>
+      </div>
+    </div>
+    <div class="compare-table">
+      <div class="compare-row compare-row-head">
+        <span>款式</span>
+        ${columns.map((site) => `<span>${publicSiteName(site)}</span>`).join("")}
+      </div>
+      ${rows.map((row) => `
+        <div class="compare-row">
+          <strong>${row.type.label}</strong>
+          ${columns.map((site) => {
+            const item = row.bySite[site];
+            if (!item) return `<span class="missing">-</span>`;
+            const price = `${formatPrice(item.price)} ${item.currency}`;
+            return item.site === "52hqb"
+              ? `<span>${price}</span>`
+              : `<a href="${item.url}" target="_blank" rel="noreferrer">${price}</a>`;
+          }).join("")}
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
 function renderFilters(items) {
   const sites = ["all", ...siteOrder.filter((site) => items.some((item) => item.site === site))];
   filterTabs.innerHTML = sites.map((site) => {
@@ -415,6 +482,7 @@ function renderResults(query, items) {
   if (!items.length) {
     priceInsights.innerHTML = "";
     dataTrust.innerHTML = "";
+    matchCompare.innerHTML = "";
     filterTabs.innerHTML = "";
     siteResults.innerHTML = `<div class="empty">没有找到匹配结果，试试 iPhone 17 或 Samsung S25 Ultra。</div>`;
     return;
@@ -422,6 +490,7 @@ function renderResults(query, items) {
 
   renderInsights(items);
   renderDataTrust(items);
+  renderMatchCompare(items);
   renderFilters(items);
   renderResultsView();
 }
