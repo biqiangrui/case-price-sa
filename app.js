@@ -282,6 +282,11 @@ imageInput.addEventListener("change", () => {
   submitSearch("iPhone 17 Pro Max");
 });
 
-renderQuickSearches();
-renderPlatforms();
-loadProducts();
+async function init() {
+  renderQuickSearches();
+  renderPlatforms();
+  await loadProducts();
+  submitSearch("iPhone 17 Pro Max");
+}
+
+init();
