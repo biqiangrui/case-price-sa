@@ -8,42 +8,42 @@ const procurementPlatforms = [
     name: "52华强北",
     url: "https://52hqb.com/list/new?key=IPHONE+17",
     displayUrl: "52hqb.com",
-    image: "https://rqqenomefezlslxfdbrn.supabase.co/storage/v1/object/public/product-images/case-magsafe.svg",
+    image: "images/case-magsafe.svg",
     desc: "你的主要货源池，适合查找 iPhone / Samsung 新款手机壳批发款。"
   },
   {
     name: "1688",
     url: "https://s.1688.com/selloffer/offer_search.htm?keywords=%CA%D6%BB%FA%BF%C7",
     displayUrl: "1688.com",
-    image: "https://rqqenomefezlslxfdbrn.supabase.co/storage/v1/object/public/product-images/case-clear.svg",
+    image: "images/case-clear.svg",
     desc: "中国批发采购平台，适合找低成本透明壳、防摔壳、套装款。"
   },
   {
     name: "AliExpress",
     url: "https://www.aliexpress.com/wholesale?SearchText=phone+case",
     displayUrl: "aliexpress.com",
-    image: "https://rqqenomefezlslxfdbrn.supabase.co/storage/v1/object/public/product-images/case-fashion.svg",
+    image: "images/case-fashion.svg",
     desc: "跨境零售和小批量采购参考，适合看国际价格和图片风格。"
   },
   {
     name: "Alibaba",
     url: "https://www.alibaba.com/trade/search?SearchText=phone+case",
     displayUrl: "alibaba.com",
-    image: "https://rqqenomefezlslxfdbrn.supabase.co/storage/v1/object/public/product-images/case-armor.svg",
+    image: "images/case-armor.svg",
     desc: "适合找工厂、定制包装、ODM/OEM 手机壳供应商。"
   },
   {
     name: "DHgate",
     url: "https://www.dhgate.com/wholesale/search.do?searchkey=phone+case",
     displayUrl: "dhgate.com",
-    image: "https://rqqenomefezlslxfdbrn.supabase.co/storage/v1/object/public/product-images/case-silicone.svg",
+    image: "images/case-silicone.svg",
     desc: "适合查看小批量跨境供货价格和热卖款式。"
   },
   {
     name: "Made-in-China",
     url: "https://www.made-in-china.com/products-search/hot-china-products/Phone_Case.html",
     displayUrl: "made-in-china.com",
-    image: "https://rqqenomefezlslxfdbrn.supabase.co/storage/v1/object/public/product-images/case-magsafe.svg",
+    image: "images/case-magsafe.svg",
     desc: "适合寻找工厂型供应商和出口手机壳产品目录。"
   }
 ];
@@ -101,6 +101,14 @@ function parseCsv(text) {
   return rows.map((values) => Object.fromEntries(headers.map((header, index) => [header, values[index] || ""])));
 }
 
+function displayImageUrl(url) {
+  const filename = String(url || "").split("/").pop();
+  if (filename && /^case-[a-z-]+\.svg$/.test(filename)) {
+    return `images/${filename}`;
+  }
+  return url;
+}
+
 function hydrateProduct(row) {
   return {
     id: row.id,
@@ -110,7 +118,7 @@ function hydrateProduct(row) {
     siteClass: siteClass(row.platform),
     price: Number(row.price),
     currency: row.currency || "SAR",
-    imageUrl: row.image_url,
+    imageUrl: displayImageUrl(row.image_url),
     url: row.product_url,
     displayUrl: row.display_url,
     desc: `${row.platform} · ${row.model} · ${row.tags}`,
