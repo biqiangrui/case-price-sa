@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="520" viewBox="0 0 420 520">
+  <rect width="420" height="520" fill="#f4f5f6"/>
+  <rect x="98" y="44" width="224" height="432" rx="50" fill="#d7dde2" stroke="#202124" stroke-width="18"/>
+  <path d="M112 188h196M112 332h196M154 58v404M266 58v404" stroke="#939ca5" stroke-width="8" opacity=".45"/>
+  <rect x="132" y="82" width="78" height="78" rx="24" fill="#f8f9fa" stroke="#202124" stroke-width="10"/>
+  <circle cx="163" cy="116" r="13" fill="#202124"/>
+  <circle cx="190" cy="116" r="13" fill="#202124"/>
+  <circle cx="176" cy="144" r="13" fill="#202124"/>
+  <rect x="158" y="348" width="104" height="18" rx="9" fill="#202124"/>
+  <text x="210" y="492" text-anchor="middle" font-family="Arial" font-size="26" fill="#202124">Armor Case</text>
+</svg>

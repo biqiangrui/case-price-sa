@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>沙特手机壳价格搜索</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app home" id="app">
+      <section class="search-stage">
+        <div class="logo" aria-label="沙特手机壳价格搜索">
+          <span>Case</span><span>Price</span><span>SA</span>
+        </div>
+
+        <form class="search-box" id="searchForm">
+          <input id="searchInput" type="search" placeholder="搜索 iPhone 17 Pro Max 手机壳价格" autocomplete="off">
+          <label class="image-button" title="图片搜索">
+            <input id="imageInput" type="file" accept="image/*">
+            <span>图片</span>
+          </label>
+          <button type="submit">搜索</button>
+        </form>
+
+        <div class="quick-searches" id="quickSearches"></div>
+      </section>
+
+      <section class="platforms" id="platforms">
+        <div class="platforms-head">
+          <h1>手机壳采购平台</h1>
+          <p>点击平台图片，直接跳转到对应网站查找更多手机壳。</p>
+        </div>
+        <div id="platformGrid" class="platform-grid"></div>
+      </section>
+
+      <section class="results" id="results" aria-live="polite">
+        <div class="results-head">
+          <div>
+            <h1 id="resultTitle">搜索结果</h1>
+            <p id="resultMeta"></p>
+          </div>
+          <a class="source-link" href="https://52hqb.com/list/new?key=IPHONE+17" target="_blank" rel="noreferrer">我的货源 52hqb</a>
+        </div>
+
+        <div id="siteResults" class="site-results"></div>
+      </section>
+    </main>
+
+    <script src="supabase-config.js?v=20260604-supabase"></script>
+    <script src="app.js?v=20260604-supabase"></script>
+  </body>
+</html>
