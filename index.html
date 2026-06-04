@@ -43,11 +43,26 @@
           <span class="source-link">我们的报价</span>
         </div>
 
+        <div class="price-insights" id="priceInsights"></div>
+
+        <div class="result-tools">
+          <div class="filter-tabs" id="filterTabs" aria-label="平台筛选"></div>
+          <label class="sort-control">
+            <span>排序</span>
+            <select id="sortSelect">
+              <option value="recommended">推荐</option>
+              <option value="price-low">价格从低到高</option>
+              <option value="price-high">价格从高到低</option>
+              <option value="newest">最新数据</option>
+            </select>
+          </label>
+        </div>
+
         <div id="siteResults" class="site-results"></div>
       </section>
     </main>
 
     <script src="supabase-config.js?v=20260604-supabase"></script>
-    <script src="app.js?v=20260604-supabase"></script>
+    <script src="app.js?v=20260604-v2d"></script>
   </body>
 </html>

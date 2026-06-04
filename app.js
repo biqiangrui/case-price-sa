@@ -2,6 +2,10 @@ const quickTerms = ["iPhone 17 Pro Max", "iPhone 17", "Samsung S25 Ultra", "Sams
 const siteOrder = ["52hqb", "Noon", "SHEIN", "Amazon.sa"];
 let productDatabase = [];
 let dataSourceName = "products.csv";
+let activeSiteFilter = "all";
+let activeSort = "recommended";
+let currentQuery = "";
+let currentItems = [];
 
 const procurementPlatforms = [
   {
@@ -57,6 +61,9 @@ const platformGrid = document.querySelector("#platformGrid");
 const results = document.querySelector("#results");
 const resultTitle = document.querySelector("#resultTitle");
 const resultMeta = document.querySelector("#resultMeta");
+const priceInsights = document.querySelector("#priceInsights");
+const filterTabs = document.querySelector("#filterTabs");
+const sortSelect = document.querySelector("#sortSelect");
 const siteResults = document.querySelector("#siteResults");
 
 function normalize(value) {
@@ -154,8 +161,16 @@ function publicTitle(item) {
 }
 
 async function loadProducts() {
-  try {
-    if (window.SUPABASE_CONFIG?.url && window.SUPABASE_CONFIG?.anonKey) {
+  async function loadCsvProducts() {
+    const response = await fetch("products.csv", { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const csv = await response.text();
+    productDatabase = parseCsv(csv).map(hydrateProduct);
+    dataSourceName = "products.csv";
+  }
+
+  if (window.SUPABASE_CONFIG?.url && window.SUPABASE_CONFIG?.anonKey) {
+    try {
       const response = await fetch(`${window.SUPABASE_CONFIG.url}/rest/v1/products?select=*&order=updated_at.desc`, {
         headers: {
           apikey: window.SUPABASE_CONFIG.anonKey,
@@ -179,13 +194,13 @@ async function loadProducts() {
       }));
       dataSourceName = "Supabase 云端数据库";
       return;
+    } catch (error) {
+      console.warn("Supabase 加载失败，改用 products.csv。", error);
     }
+  }
 
-    const response = await fetch("products.csv", { cache: "no-store" });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const csv = await response.text();
-    productDatabase = parseCsv(csv).map(hydrateProduct);
-    dataSourceName = "products.csv";
+  try {
+    await loadCsvProducts();
   } catch (error) {
     siteResults.innerHTML = `<div class="empty">商品数据库加载失败，请确认 Supabase 配置或 products.csv 可以访问。</div>`;
     console.error(error);
@@ -210,7 +225,11 @@ function searchCases(query) {
 }
 
 function groupedBySite(items) {
-  return siteOrder.map((site) => ({
+  const orderedSites = activeSort === "recommended"
+    ? siteOrder
+    : [...new Set(items.map((item) => item.site))];
+
+  return orderedSites.map((site) => ({
     site,
     items: items.filter((item) => item.site === site)
   })).filter((group) => group.items.length);
@@ -219,6 +238,96 @@ function groupedBySite(items) {
 function priceSummary(items) {
   const prices = items.map((item) => item.price);
   return `${Math.min(...prices).toFixed(2).replace(".00", "")}-${Math.max(...prices).toFixed(2).replace(".00", "")} SAR`;
+}
+
+function formatPrice(value) {
+  return Number(value).toFixed(2).replace(".00", "");
+}
+
+function siteRank(site) {
+  const index = siteOrder.indexOf(site);
+  return index === -1 ? siteOrder.length : index;
+}
+
+function sortedItems(items) {
+  return [...items].sort((a, b) => {
+    if (activeSort === "price-low") return a.price - b.price;
+    if (activeSort === "price-high") return b.price - a.price;
+    if (activeSort === "newest") return String(b.updatedAt).localeCompare(String(a.updatedAt));
+    return siteRank(a.site) - siteRank(b.site) || a.price - b.price;
+  });
+}
+
+function filteredItems(items) {
+  if (activeSiteFilter === "all") return items;
+  return items.filter((item) => item.site === activeSiteFilter);
+}
+
+function renderInsights(items) {
+  if (!items.length) {
+    priceInsights.innerHTML = "";
+    return;
+  }
+
+  const marketItems = items.filter((item) => item.site !== "52hqb");
+  const ownItems = items.filter((item) => item.site === "52hqb");
+  const marketPrices = marketItems.map((item) => item.price);
+  const ownPrices = ownItems.map((item) => item.price);
+  const lowestMarket = marketPrices.length ? Math.min(...marketPrices) : null;
+  const averageMarket = marketPrices.length
+    ? marketPrices.reduce((sum, price) => sum + price, 0) / marketPrices.length
+    : null;
+  const ownLowest = ownPrices.length ? Math.min(...ownPrices) : null;
+  const saving = lowestMarket !== null && ownLowest !== null ? lowestMarket - ownLowest : null;
+  const savingRate = saving !== null && lowestMarket > 0 ? Math.round((saving / lowestMarket) * 100) : null;
+
+  const cards = [
+    {
+      label: "最低市场价",
+      value: lowestMarket === null ? "-" : `${formatPrice(lowestMarket)} SAR`,
+      note: marketItems.length ? "沙特平台最低价" : "暂无市场数据"
+    },
+    {
+      label: "我们的报价",
+      value: ownLowest === null ? "-" : `${formatPrice(ownLowest)} SAR`,
+      note: ownItems.length ? "自有渠道报价" : "暂无报价"
+    },
+    {
+      label: "价格优势",
+      value: saving === null ? "-" : `${formatPrice(Math.max(saving, 0))} SAR`,
+      note: savingRate === null ? "等待更多数据" : `约低 ${Math.max(savingRate, 0)}%`
+    },
+    {
+      label: "市场均价",
+      value: averageMarket === null ? "-" : `${formatPrice(averageMarket)} SAR`,
+      note: `${marketItems.length} 个沙特平台结果`
+    }
+  ];
+
+  priceInsights.innerHTML = cards.map((card) => `
+    <div class="insight-card">
+      <span>${card.label}</span>
+      <strong>${card.value}</strong>
+      <p>${card.note}</p>
+    </div>
+  `).join("");
+}
+
+function renderFilters(items) {
+  const sites = ["all", ...siteOrder.filter((site) => items.some((item) => item.site === site))];
+  filterTabs.innerHTML = sites.map((site) => {
+    const count = site === "all" ? items.length : items.filter((item) => item.site === site).length;
+    const label = site === "all" ? "全部平台" : publicSiteName(site);
+    return `<button type="button" class="${activeSiteFilter === site ? "active" : ""}" data-site="${site}">${label}<span>${count}</span></button>`;
+  }).join("");
+
+  filterTabs.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      activeSiteFilter = button.dataset.site;
+      renderFilters(items);
+      renderResultsView();
+    });
+  });
 }
 
 function renderItem(item) {
@@ -255,15 +364,33 @@ function renderResults(query, items) {
   app.classList.remove("home");
   app.classList.add("has-results");
   results.hidden = false;
+  currentQuery = query;
+  currentItems = items;
+  activeSiteFilter = "all";
   resultTitle.textContent = `${query} 价格搜索结果`;
   resultMeta.textContent = `从 ${dataSourceName} 找到 ${items.length} 个手机壳结果`;
 
   if (!items.length) {
+    priceInsights.innerHTML = "";
+    filterTabs.innerHTML = "";
     siteResults.innerHTML = `<div class="empty">没有找到匹配结果，试试 iPhone 17 或 Samsung S25 Ultra。</div>`;
     return;
   }
 
-  siteResults.innerHTML = groupedBySite(items).map((group) => `
+  renderInsights(items);
+  renderFilters(items);
+  renderResultsView();
+}
+
+function renderResultsView() {
+  const visibleItems = sortedItems(filteredItems(currentItems));
+
+  if (!visibleItems.length) {
+    siteResults.innerHTML = `<div class="empty">这个平台暂时没有匹配结果。</div>`;
+    return;
+  }
+
+  siteResults.innerHTML = groupedBySite(visibleItems).map((group) => `
     <section class="site-block">
       <div class="site-head">
         <div class="site-title">
@@ -317,6 +444,11 @@ searchForm.addEventListener("submit", (event) => {
 imageInput.addEventListener("change", () => {
   if (!imageInput.files[0]) return;
   submitSearch("iPhone 17 Pro Max");
+});
+
+sortSelect.addEventListener("change", () => {
+  activeSort = sortSelect.value;
+  renderResultsView();
 });
 
 async function init() {

@@ -346,6 +346,118 @@ p {
   font-size: 14px;
 }
 
+.price-insights {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.insight-card {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid rgba(223, 230, 225, 0.95);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 10px 26px rgba(16, 44, 34, 0.06);
+}
+
+.insight-card span {
+  color: #4f6258;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.insight-card strong {
+  overflow: hidden;
+  color: var(--saudi-deep);
+  font-size: 22px;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.insight-card p {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.result-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.filter-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(210, 220, 214, 0.92);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #30483b;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.filter-tabs button.active {
+  border-color: rgba(11, 107, 67, 0.34);
+  background: #0b6b43;
+  color: #fff;
+}
+
+.filter-tabs button span {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: rgba(11, 107, 67, 0.08);
+  color: inherit;
+  font-size: 12px;
+}
+
+.filter-tabs button.active span {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.sort-control {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 8px;
+  height: 36px;
+  padding: 0 10px 0 12px;
+  border: 1px solid rgba(210, 220, 214, 0.92);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.74);
+  color: #4f6258;
+  font-size: 13px;
+}
+
+.sort-control select {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--saudi-deep);
+  font: inherit;
+  font-weight: 700;
+}
+
 .site-results {
   display: grid;
   gap: 28px;
@@ -568,9 +680,14 @@ p {
 
   .results-head,
   .site-head,
-  .platforms-head {
+  .platforms-head,
+  .result-tools {
     align-items: start;
     flex-direction: column;
+  }
+
+  .price-insights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .platform-grid {
@@ -589,5 +706,16 @@ p {
   .price {
     grid-column: 2;
     text-align: left;
+  }
+}
+
+@media (max-width: 460px) {
+  .price-insights {
+    grid-template-columns: 1fr;
+  }
+
+  .sort-control {
+    width: 100%;
+    justify-content: space-between;
   }
 }
