@@ -384,6 +384,42 @@ p {
   font-size: 12px;
 }
 
+.data-trust {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(214, 226, 218, 0.92);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.68);
+  color: #415349;
+}
+
+.data-trust div {
+  display: grid;
+  gap: 4px;
+}
+
+.data-trust strong {
+  color: var(--saudi-deep);
+  font-size: 13px;
+}
+
+.data-trust span,
+.data-trust p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.data-trust p {
+  flex: 0 0 auto;
+  max-width: 340px;
+  text-align: right;
+}
+
 .result-tools {
   display: flex;
   align-items: center;
@@ -615,6 +651,12 @@ p {
   line-height: 1.45;
 }
 
+.freshness {
+  margin-top: 6px;
+  color: #6f7c75;
+  font-size: 12px;
+}
+
 .tags {
   display: flex;
   flex-wrap: wrap;
@@ -681,9 +723,15 @@ p {
   .results-head,
   .site-head,
   .platforms-head,
-  .result-tools {
+  .result-tools,
+  .data-trust {
     align-items: start;
     flex-direction: column;
+  }
+
+  .data-trust p {
+    max-width: none;
+    text-align: left;
   }
 
   .price-insights {

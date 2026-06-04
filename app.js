@@ -62,6 +62,7 @@ const results = document.querySelector("#results");
 const resultTitle = document.querySelector("#resultTitle");
 const resultMeta = document.querySelector("#resultMeta");
 const priceInsights = document.querySelector("#priceInsights");
+const dataTrust = document.querySelector("#dataTrust");
 const filterTabs = document.querySelector("#filterTabs");
 const sortSelect = document.querySelector("#sortSelect");
 const siteResults = document.querySelector("#siteResults");
@@ -244,6 +245,29 @@ function formatPrice(value) {
   return Number(value).toFixed(2).replace(".00", "");
 }
 
+function parseDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function formatDate(value) {
+  const date = parseDate(value);
+  if (!date) return "未知时间";
+  return new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).format(date);
+}
+
+function latestUpdate(items) {
+  const times = items
+    .map((item) => parseDate(item.updatedAt)?.getTime())
+    .filter(Boolean);
+  if (!times.length) return null;
+  return new Date(Math.max(...times)).toISOString();
+}
+
 function siteRank(site) {
   const index = siteOrder.indexOf(site);
   return index === -1 ? siteOrder.length : index;
@@ -313,6 +337,23 @@ function renderInsights(items) {
   `).join("");
 }
 
+function renderDataTrust(items) {
+  if (!items.length) {
+    dataTrust.innerHTML = "";
+    return;
+  }
+
+  const updateText = formatDate(latestUpdate(items));
+  const sourceCount = new Set(items.map((item) => publicSiteName(item.site))).size;
+  dataTrust.innerHTML = `
+    <div>
+      <strong>数据更新时间：${updateText}</strong>
+      <span>${sourceCount} 个价格来源 · 商品链接可直接打开原平台核对</span>
+    </div>
+    <p>价格会随平台活动和库存变化，请以原平台页面实时价格为准。</p>
+  `;
+}
+
 function renderFilters(items) {
   const sites = ["all", ...siteOrder.filter((site) => items.some((item) => item.site === site))];
   filterTabs.innerHTML = sites.map((site) => {
@@ -350,6 +391,7 @@ function renderItem(item) {
         ${titleMarkup}
         <p class="url">${publicDisplayUrl(item)}</p>
         <p class="desc">${publicDesc(item)}</p>
+        <p class="freshness">更新：${formatDate(item.updatedAt)} · 来源：${publicSiteName(item.site)}</p>
         <div class="tags">${item.tags.slice(0, 5).map((tag) => `<span class="tag">${tag}</span>`).join("")}</div>
       </div>
       <div class="price">
@@ -372,12 +414,14 @@ function renderResults(query, items) {
 
   if (!items.length) {
     priceInsights.innerHTML = "";
+    dataTrust.innerHTML = "";
     filterTabs.innerHTML = "";
     siteResults.innerHTML = `<div class="empty">没有找到匹配结果，试试 iPhone 17 或 Samsung S25 Ultra。</div>`;
     return;
   }
 
   renderInsights(items);
+  renderDataTrust(items);
   renderFilters(items);
   renderResultsView();
 }
