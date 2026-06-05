@@ -604,10 +604,6 @@ p {
   background: var(--yellow);
 }
 
-.site-dot.shein {
-  background: #111;
-}
-
 .site-dot.amazon {
   background: #ff9900;
 }

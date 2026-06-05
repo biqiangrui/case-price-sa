@@ -1,5 +1,6 @@
 const quickTerms = ["iPhone 17 Pro Max", "iPhone 17", "Samsung S25 Ultra", "Samsung A56 5G"];
-const siteOrder = ["52hqb", "Noon", "SHEIN", "Amazon.sa"];
+const excludedPlatforms = ["SHEIN"];
+const siteOrder = ["52hqb", "Noon", "Amazon.sa"];
 let productDatabase = [];
 let dataSourceName = "products.csv";
 let activeSiteFilter = "all";
@@ -239,10 +240,13 @@ function hydrateProduct(row) {
   };
 }
 
+function visibleProducts(rows) {
+  return rows.filter((item) => !excludedPlatforms.includes(item.site));
+}
+
 function siteClass(site) {
   if (site === "52hqb") return "source";
   if (site === "Noon") return "noon";
-  if (site === "SHEIN") return "shein";
   if (site === "Amazon.sa") return "amazon";
   return "source";
 }
@@ -270,7 +274,7 @@ async function loadProducts() {
     const response = await fetch("products.csv", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const csv = await response.text();
-    productDatabase = parseCsv(csv).map(hydrateProduct);
+    productDatabase = visibleProducts(parseCsv(csv).map(hydrateProduct));
     dataSourceName = "products.csv";
   }
 
@@ -284,7 +288,7 @@ async function loadProducts() {
       });
       if (!response.ok) throw new Error(`Supabase HTTP ${response.status}`);
       const rows = await response.json();
-      productDatabase = rows.map((row) => hydrateProduct({
+      productDatabase = visibleProducts(rows.map((row) => hydrateProduct({
         id: row.id,
         title: row.title,
         model: row.model,
@@ -296,7 +300,7 @@ async function loadProducts() {
         display_url: row.display_url,
         tags: row.tags,
         updated_at: row.updated_at
-      }));
+      })));
       dataSourceName = "Supabase 云端数据库";
       return;
     } catch (error) {
