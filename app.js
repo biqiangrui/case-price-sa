@@ -60,6 +60,13 @@ const matchTypes = [
   { label: "时尚图案款", words: ["fashion", "cute", "pattern", "colorful", "glitter"] }
 ];
 
+const productImageOverrides = [
+  {
+    key: "Z01C5FDB9BA07BBE44F71Z",
+    image: "https://f.nooncdn.com/p/pzsku/Z01C5FDB9BA07BBE44F71Z/45/1756910673/ed70ef70-9041-4dc6-bbc0-39cf36dd1834.jpg?width=1200"
+  }
+];
+
 const app = document.querySelector("#app");
 const searchForm = document.querySelector("#searchForm");
 const searchInput = document.querySelector("#searchInput");
@@ -127,6 +134,12 @@ function displayImageUrl(url) {
 }
 
 function inferProductImage(row) {
+  const override = productImageOverrides.find((item) => String(row.product_url || "").includes(item.key));
+  if (override) return override.image;
+
+  const sourceImage = displayImageUrl(row.image_url);
+  if (sourceImage && !sourceImage.startsWith("images/")) return sourceImage;
+
   const text = normalize(`${row.title} ${row.model} ${row.platform} ${row.tags}`);
   if (text.includes("glitter")) return "images/case-clear-glitter.svg";
   if (text.includes("nillkin") || text.includes("black") || text.includes("matte")) return "images/case-black-magnetic.svg";
@@ -138,7 +151,7 @@ function inferProductImage(row) {
   if (text.includes("shockproof") || text.includes("military") || text.includes("heavy") || text.includes("armor")) return "images/case-shockproof-soft.svg";
   if (text.includes("clear") || text.includes("transparent") || text.includes("anti yellow")) return "images/case-clear.svg";
   if (text.includes("magsafe") || text.includes("magnetic")) return "images/case-magsafe.svg";
-  return displayImageUrl(row.image_url);
+  return sourceImage;
 }
 
 function hydrateProduct(row) {
@@ -460,10 +473,10 @@ function renderItem(item) {
     : `<a href="${item.url}" target="_blank" rel="noreferrer">${title}</a>`;
   const imageMarkup = item.site === "52hqb"
     ? `<div class="thumb image-thumb" aria-label="${title}">
-        <img src="${item.imageUrl}" alt="${title}" loading="lazy">
+        <img src="${item.imageUrl}" alt="${title}" loading="lazy" referrerpolicy="no-referrer">
       </div>`
     : `<a class="thumb image-thumb" href="${item.url}" target="_blank" rel="noreferrer" aria-label="${title}">
-        <img src="${item.imageUrl}" alt="${title}" loading="lazy">
+        <img src="${item.imageUrl}" alt="${title}" loading="lazy" referrerpolicy="no-referrer">
       </a>`;
 
   return `
