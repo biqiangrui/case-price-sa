@@ -23,13 +23,6 @@ const procurementPlatforms = [
     desc: "客户熟悉的沙特购物网站，适合查看品牌款、MagSafe、防摔壳价格。"
   },
   {
-    name: "SHEIN",
-    url: "https://ar.shein.com/pdsearch/phone%20case/",
-    displayUrl: "ar.shein.com",
-    image: "images/case-fashion.svg",
-    desc: "沙特年轻客户常用平台，适合对比时尚款、透明款和低价款。"
-  },
-  {
     name: "Jarir",
     url: "https://www.jarir.com/sa-en/catalogsearch/result/?q=phone%20case",
     displayUrl: "jarir.com",
