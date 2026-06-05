@@ -126,6 +126,21 @@ function displayImageUrl(url) {
   return url;
 }
 
+function inferProductImage(row) {
+  const text = normalize(`${row.title} ${row.model} ${row.platform} ${row.tags}`);
+  if (text.includes("glitter")) return "images/case-clear-glitter.svg";
+  if (text.includes("nillkin") || text.includes("black") || text.includes("matte")) return "images/case-black-magnetic.svg";
+  if (text.includes("kickstand") || text.includes("stand")) return "images/case-kickstand-armor.svg";
+  if (text.includes("camera") || text.includes("lens")) return "images/case-samsung-camera.svg";
+  if (text.includes("cute") || text.includes("pattern") || text.includes("colorful")) return "images/case-cute-pattern.svg";
+  if (text.includes("apple") || text.includes("premium")) return "images/case-premium-clear.svg";
+  if ((text.includes("magsafe") || text.includes("magnetic")) && (text.includes("clear") || text.includes("transparent"))) return "images/case-magsafe.svg";
+  if (text.includes("shockproof") || text.includes("military") || text.includes("heavy") || text.includes("armor")) return "images/case-shockproof-soft.svg";
+  if (text.includes("clear") || text.includes("transparent") || text.includes("anti yellow")) return "images/case-clear.svg";
+  if (text.includes("magsafe") || text.includes("magnetic")) return "images/case-magsafe.svg";
+  return displayImageUrl(row.image_url);
+}
+
 function hydrateProduct(row) {
   return {
     id: row.id,
@@ -135,7 +150,7 @@ function hydrateProduct(row) {
     siteClass: siteClass(row.platform),
     price: Number(row.price),
     currency: row.currency || "SAR",
-    imageUrl: displayImageUrl(row.image_url),
+    imageUrl: inferProductImage(row),
     url: row.product_url,
     displayUrl: row.display_url,
     desc: `${row.platform} · ${row.model} · ${row.tags}`,

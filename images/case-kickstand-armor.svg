@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="520" viewBox="0 0 420 520">
+  <rect width="420" height="520" fill="#f4f6f8"/>
+  <rect x="94" y="42" width="232" height="436" rx="48" fill="#d6dce2" stroke="#202124" stroke-width="18"/>
+  <path d="M116 188h188M116 336h188M154 58v404M266 58v404" stroke="#8c969f" stroke-width="8" opacity=".45"/>
+  <rect x="132" y="78" width="80" height="80" rx="24" fill="#f8f9fa" stroke="#202124" stroke-width="10"/>
+  <circle cx="164" cy="114" r="13" fill="#202124"/>
+  <circle cx="192" cy="114" r="13" fill="#202124"/>
+  <circle cx="178" cy="142" r="13" fill="#202124"/>
+  <path d="M168 348h84l-18 76h-48l-18-76Z" fill="#202124"/>
+  <rect x="154" y="332" width="112" height="18" rx="9" fill="#202124"/>
+  <text x="210" y="492" text-anchor="middle" font-family="Arial" font-size="25" fill="#202124">Kickstand Armor</text>
+</svg>

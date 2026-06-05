@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="520" viewBox="0 0 420 520">
+  <rect width="420" height="520" fill="#fff7fc"/>
+  <rect x="104" y="52" width="212" height="416" rx="56" fill="#ffe8f5" stroke="#c2185b" stroke-width="16"/>
+  <rect x="132" y="82" width="76" height="76" rx="24" fill="#fff" stroke="#c2185b" stroke-width="9"/>
+  <circle cx="162" cy="116" r="12" fill="#c2185b"/>
+  <circle cx="188" cy="116" r="12" fill="#c2185b"/>
+  <circle cx="175" cy="142" r="12" fill="#c2185b"/>
+  <circle cx="250" cy="250" r="20" fill="#f06292"/>
+  <circle cx="188" cy="318" r="14" fill="#f8bbd0"/>
+  <path d="M276 162l9 20 20 9-20 9-9 20-9-20-20-9 20-9 9-20Z" fill="#d81b60"/>
+  <path d="M152 222l7 15 15 7-15 7-7 15-7-15-15-7 15-7 7-15Z" fill="#f48fb1"/>
+  <text x="210" y="492" text-anchor="middle" font-family="Arial" font-size="25" fill="#c2185b">Clear Glitter</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="520" viewBox="0 0 420 520">
+  <rect width="420" height="520" fill="#f4fbf9"/>
+  <rect x="104" y="50" width="212" height="420" rx="52" fill="#e2f4ef" stroke="#00897b" stroke-width="16"/>
+  <rect x="132" y="78" width="76" height="164" rx="28" fill="#fff" stroke="#00897b" stroke-width="9"/>
+  <circle cx="170" cy="112" r="18" fill="#00897b"/>
+  <circle cx="170" cy="160" r="18" fill="#00897b"/>
+  <circle cx="170" cy="208" r="18" fill="#00897b"/>
+  <path d="M238 94h44M238 142h44M238 190h44" stroke="#00897b" stroke-width="10" stroke-linecap="round"/>
+  <path d="M142 318h136" stroke="#73bdb4" stroke-width="12" stroke-linecap="round"/>
+  <path d="M142 354h136" stroke="#73bdb4" stroke-width="12" stroke-linecap="round"/>
+  <text x="210" y="492" text-anchor="middle" font-family="Arial" font-size="25" fill="#00897b">Camera Protection</text>
+</svg>
