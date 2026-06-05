@@ -62,8 +62,74 @@ const matchTypes = [
 
 const productImageOverrides = [
   {
+    key: "Z8DFD3DE5976FEE6B5A73Z",
+    image: "https://f.nooncdn.com/p/pzsku/Z8DFD3DE5976FEE6B5A73Z/45/1758276303/238c8d86-c03e-4dee-9c7c-6a510cdccce8.jpg?width=1200"
+  },
+  {
+    key: "ZED82E893E697B0929490Z",
+    image: "https://f.nooncdn.com/p/pzsku/ZED82E893E697B0929490Z/45/1756375193/10262aef-ee16-4093-8644-7e5db37e0ae0.jpg?width=1200"
+  },
+  {
     key: "Z01C5FDB9BA07BBE44F71Z",
     image: "https://f.nooncdn.com/p/pzsku/Z01C5FDB9BA07BBE44F71Z/45/1756910673/ed70ef70-9041-4dc6-bbc0-39cf36dd1834.jpg?width=1200"
+  },
+  {
+    key: "ZABC3DA6741AB2ED28FC0Z",
+    image: "https://f.nooncdn.com/p/pzsku/ZABC3DA6741AB2ED28FC0Z/45/1756432514/3809e9e5-6f5d-487e-a1c6-c0c2c11ef469.jpg?width=1200"
+  },
+  {
+    key: "N70213940V",
+    image: "https://f.nooncdn.com/p/pzsku/ZD7DBCA95D9BAEFFEFAD9Z/45/_/1779094030/e2e2d909-0329-4f8c-9e48-bacb33d7f173.jpg?width=1200"
+  },
+  {
+    id: "6",
+    url: "https://www.noon.com/saudi-en/iphone-17-case-ultra-thin-light-design-iphone-17-cases-support-magsafe-wireless-charging-anti-yellowing-iphone-17-cover-phone-case-with-strong-shock-resistant-edges-clear-iphone-cover/ZC570993CE5DD3D7B3366Z/p/?o=d21049576a19f16c",
+    image: "https://f.nooncdn.com/p/pzsku/ZC570993CE5DD3D7B3366Z/45/1761033563/57dbc78d-72ad-41bf-bbfd-de890bfb3004.jpg?width=800"
+  },
+  {
+    id: "7",
+    url: "https://www.noon.com/saudi-en/for-samsung-s25-ultra-case-compatible-with-magsafe-magnetic-translucent-matte-back-shockproof-cover-with-strong-magnet-slim-thin-full-protection-phone-case-for-galaxy-s25-ultra-5g-black/Z30C6BFDF54ACB5570B88Z/p/?o=aab68234dfe6b33e",
+    image: "https://f.nooncdn.com/p/pzsku/Z30C6BFDF54ACB5570B88Z/45/_/1737402633/700ce314-a80a-4435-ab70-857e639b1449.jpg?width=800"
+  },
+  {
+    id: "8",
+    url: "https://www.noon.com/saudi-en/samsung-galaxy-a56-5g-premium-case-premium-silicone-case-cover-designed-for-samsung-galaxy-a56-5g-samsung-galaxy-a56-5g-case-camera-and-drop-protection-thin-protective-back-cover-case-for-samsung-galaxy-a56-5g-clear/Z3103EF0654C5BED31106Z/p/?o=z3103ef0654c5bed31106z-1",
+    image: "https://f.nooncdn.com/p/pzsku/Z3103EF0654C5BED31106Z/45/1745087086/182999c0-3ce3-41a2-b563-cde3ef7027df.jpg?width=800"
+  },
+  {
+    id: "16",
+    url: "https://www.amazon.sa/dp/B0FDJH4QBN",
+    image: "https://m.media-amazon.com/images/I/41ti-B0lJRL._AC_SL1000_.jpg"
+  },
+  {
+    id: "17",
+    url: "https://www.amazon.sa/dp/B0FDJQWGT2",
+    image: "https://m.media-amazon.com/images/I/41cjN0w03fL._AC_SL1000_.jpg"
+  },
+  {
+    id: "18",
+    url: "https://www.amazon.sa/dp/B0FDJH4QBN",
+    image: "https://m.media-amazon.com/images/I/41ti-B0lJRL._AC_SL1000_.jpg"
+  },
+  {
+    id: "19",
+    url: "https://www.amazon.sa/dp/B0FDJQWGT2",
+    image: "https://m.media-amazon.com/images/I/41cjN0w03fL._AC_SL1000_.jpg"
+  },
+  {
+    id: "20",
+    url: "https://www.amazon.sa/dp/B0FDJQWGT2",
+    image: "https://m.media-amazon.com/images/I/41cjN0w03fL._AC_SL1000_.jpg"
+  },
+  {
+    id: "21",
+    url: "https://www.amazon.sa/dp/B0DPFWRPVD",
+    image: "https://m.media-amazon.com/images/I/51atkgOLjFL._AC_SL1000_.jpg"
+  },
+  {
+    id: "22",
+    url: "https://www.amazon.sa/dp/B0DXTHZX1G",
+    image: "https://m.media-amazon.com/images/I/51atkgOLjFL._AC_SL1000_.jpg"
   }
 ];
 
@@ -133,8 +199,15 @@ function displayImageUrl(url) {
   return url;
 }
 
+function findProductOverride(row) {
+  return productImageOverrides.find((item) => {
+    if (item.id && String(row.id) === item.id) return true;
+    return item.key && String(row.product_url || "").includes(item.key);
+  });
+}
+
 function inferProductImage(row) {
-  const override = productImageOverrides.find((item) => String(row.product_url || "").includes(item.key));
+  const override = findProductOverride(row);
   if (override) return override.image;
 
   const sourceImage = displayImageUrl(row.image_url);
@@ -155,6 +228,7 @@ function inferProductImage(row) {
 }
 
 function hydrateProduct(row) {
+  const override = findProductOverride(row);
   return {
     id: row.id,
     title: row.title,
@@ -164,7 +238,7 @@ function hydrateProduct(row) {
     price: Number(row.price),
     currency: row.currency || "SAR",
     imageUrl: inferProductImage(row),
-    url: row.product_url,
+    url: override?.url || row.product_url,
     displayUrl: row.display_url,
     desc: `${row.platform} · ${row.model} · ${row.tags}`,
     tags: row.tags.split(/\s+/).filter(Boolean),
@@ -473,10 +547,10 @@ function renderItem(item) {
     : `<a href="${item.url}" target="_blank" rel="noreferrer">${title}</a>`;
   const imageMarkup = item.site === "52hqb"
     ? `<div class="thumb image-thumb" aria-label="${title}">
-        <img src="${item.imageUrl}" alt="${title}" loading="lazy" referrerpolicy="no-referrer">
+        <img src="${item.imageUrl}" alt="${title}" loading="eager" referrerpolicy="no-referrer">
       </div>`
     : `<a class="thumb image-thumb" href="${item.url}" target="_blank" rel="noreferrer" aria-label="${title}">
-        <img src="${item.imageUrl}" alt="${title}" loading="lazy" referrerpolicy="no-referrer">
+        <img src="${item.imageUrl}" alt="${title}" loading="eager" referrerpolicy="no-referrer">
       </a>`;
 
   return `
