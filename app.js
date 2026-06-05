@@ -7,6 +7,7 @@ let activeSiteFilter = "all";
 let activeSort = "recommended";
 let currentQuery = "";
 let currentItems = [];
+const ownDetailItems = new Map();
 
 const procurementPlatforms = [
   {
@@ -223,6 +224,9 @@ function inferProductImage(row) {
 
 function hydrateProduct(row) {
   const override = findProductOverride(row);
+  const detailImageUrls = Array.isArray(row.detail_image_urls)
+    ? row.detail_image_urls.filter(Boolean)
+    : [];
   return {
     id: row.id,
     title: row.title,
@@ -236,7 +240,11 @@ function hydrateProduct(row) {
     displayUrl: row.display_url,
     desc: `${row.platform} · ${row.model} · ${row.tags}`,
     tags: row.tags.split(/\s+/).filter(Boolean),
-    updatedAt: row.updated_at
+    updatedAt: row.updated_at,
+    detailImageUrls,
+    sourcePrice: row.source_price,
+    sourceCurrency: row.source_currency,
+    sourcePayload: row.source_payload || null
   };
 }
 
@@ -299,7 +307,11 @@ async function loadProducts() {
         product_url: row.product_url,
         display_url: row.display_url,
         tags: row.tags,
-        updated_at: row.updated_at
+        updated_at: row.updated_at,
+        detail_image_urls: row.detail_image_urls,
+        source_price: row.source_price,
+        source_currency: row.source_currency,
+        source_payload: row.source_payload
       })));
       dataSourceName = "Supabase 云端数据库";
       return;
@@ -539,13 +551,15 @@ function renderFilters(items) {
 
 function renderItem(item) {
   const title = publicTitle(item);
+  const detailKey = `${item.site}-${item.id}`;
+  if (item.site === "52hqb") ownDetailItems.set(detailKey, item);
   const titleMarkup = item.site === "52hqb"
-    ? `<span class="result-title-text">${title}</span>`
+    ? `<button class="result-title-text own-detail-trigger" type="button" data-detail-key="${detailKey}">${title}</button>`
     : `<a href="${item.url}" target="_blank" rel="noreferrer">${title}</a>`;
   const imageMarkup = item.site === "52hqb"
-    ? `<div class="thumb image-thumb" aria-label="${title}">
+    ? `<button class="thumb image-thumb own-detail-trigger" type="button" data-detail-key="${detailKey}" aria-label="${title}">
         <img src="${item.imageUrl}" alt="${title}" loading="eager" referrerpolicy="no-referrer">
-      </div>`
+      </button>`
     : `<a class="thumb image-thumb" href="${item.url}" target="_blank" rel="noreferrer" aria-label="${title}">
         <img src="${item.imageUrl}" alt="${title}" loading="eager" referrerpolicy="no-referrer">
       </a>`;
@@ -566,6 +580,175 @@ function renderItem(item) {
       </div>
     </article>
   `;
+}
+
+function ownDetailImages(item) {
+  return Array.from(new Set([item.imageUrl, ...(item.detailImageUrls || [])].filter(Boolean)));
+}
+
+function sourceShopName(item) {
+  return item.sourcePayload?.shop
+    || item.sourcePayload?.shopName
+    || item.sourcePayload?.info?.shopInfo?.shopName
+    || "自有资料库";
+}
+
+function ensureOwnDetailModal() {
+  let modal = document.querySelector("#ownDetailModal");
+  if (modal) return modal;
+
+  modal = document.createElement("div");
+  modal.id = "ownDetailModal";
+  modal.className = "own-detail-modal";
+  modal.hidden = true;
+  document.body.append(modal);
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal || event.target.closest("[data-close-detail]")) {
+      closeOwnDetail();
+      return;
+    }
+
+    const stepButton = event.target.closest("[data-gallery-step]");
+    if (stepButton) {
+      const step = Number(stepButton.dataset.galleryStep);
+      moveDetailImage(modal, step);
+      return;
+    }
+
+    const thumbButton = event.target.closest("[data-gallery-index]");
+    if (thumbButton) {
+      setDetailImage(modal, Number(thumbButton.dataset.galleryIndex));
+      return;
+    }
+
+    const zoomTarget = event.target.closest("[data-zoom-image]");
+    if (zoomTarget) {
+      openImageZoom(zoomTarget.dataset.zoomImage, zoomTarget.alt || "");
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (modal.hidden) return;
+    if (event.key === "Escape") closeOwnDetail();
+    if (event.key === "ArrowLeft") moveDetailImage(modal, -1);
+    if (event.key === "ArrowRight") moveDetailImage(modal, 1);
+  });
+  return modal;
+}
+
+function openOwnDetail(item) {
+  const modal = ensureOwnDetailModal();
+  const images = ownDetailImages(item);
+  const title = publicTitle(item);
+  const hasGallery = images.length > 1;
+  modal.innerHTML = `
+    <div class="own-detail-panel" role="dialog" aria-modal="true" aria-label="${title}" data-gallery-active="0">
+      <button class="detail-close" type="button" data-close-detail aria-label="关闭">×</button>
+      <div class="detail-gallery">
+        <div class="detail-main-frame">
+          ${hasGallery ? `<button class="gallery-arrow gallery-prev" type="button" data-gallery-step="-1" aria-label="上一张">‹</button>` : ""}
+          <img class="detail-main-image" src="${images[0]}" alt="${title}" data-zoom-image="${images[0]}" referrerpolicy="no-referrer">
+          ${hasGallery ? `<button class="gallery-arrow gallery-next" type="button" data-gallery-step="1" aria-label="下一张">›</button>` : ""}
+          ${hasGallery ? `<span class="gallery-count">1 / ${images.length}</span>` : ""}
+        </div>
+        ${hasGallery ? `
+          <div class="detail-strip">
+            ${images.map((image, index) => `
+              <button class="${index === 0 ? "active" : ""}" type="button" data-gallery-index="${index}" aria-label="查看第 ${index + 1} 张图">
+                <img src="${image}" alt="${title} 图片 ${index + 1}" data-zoom-image="${image}" referrerpolicy="no-referrer">
+              </button>
+            `).join("")}
+          </div>
+        ` : ""}
+      </div>
+      <div class="detail-info">
+        <span class="detail-source">我们的报价 · 自有资料库</span>
+        <h2>${title}</h2>
+        <div class="detail-price">${formatPrice(item.price)} <span>${item.currency}</span></div>
+        <dl>
+          <div><dt>型号</dt><dd>${item.model}</dd></div>
+          <div><dt>来源</dt><dd>${sourceShopName(item)}</dd></div>
+          <div><dt>更新</dt><dd>${formatDate(item.updatedAt)}</dd></div>
+        </dl>
+        <p>${publicDesc(item)}</p>
+        <div class="tags">${item.tags.slice(0, 8).map((tag) => `<span class="tag">${tag}</span>`).join("")}</div>
+      </div>
+    </div>
+  `;
+  modal.hidden = false;
+  document.body.classList.add("detail-open");
+}
+
+function setDetailImage(modal, index) {
+  const panel = modal.querySelector(".own-detail-panel");
+  const images = [...modal.querySelectorAll("[data-gallery-index] img")].map((image) => image.src);
+  if (!panel || !images.length) return;
+
+  const activeIndex = (index + images.length) % images.length;
+  const mainImage = modal.querySelector(".detail-main-image");
+  const count = modal.querySelector(".gallery-count");
+  if (mainImage) {
+    mainImage.src = images[activeIndex];
+    mainImage.dataset.zoomImage = images[activeIndex];
+  }
+  if (count) count.textContent = `${activeIndex + 1} / ${images.length}`;
+  panel.dataset.galleryActive = String(activeIndex);
+  modal.querySelectorAll("[data-gallery-index]").forEach((button) => {
+    button.classList.toggle("active", Number(button.dataset.galleryIndex) === activeIndex);
+  });
+}
+
+function moveDetailImage(modal, step) {
+  const panel = modal.querySelector(".own-detail-panel");
+  if (!panel) return;
+  setDetailImage(modal, Number(panel.dataset.galleryActive || "0") + step);
+}
+
+function closeOwnDetail() {
+  const modal = document.querySelector("#ownDetailModal");
+  if (!modal) return;
+  modal.hidden = true;
+  document.body.classList.remove("detail-open");
+}
+
+function ensureImageZoomModal() {
+  let modal = document.querySelector("#imageZoomModal");
+  if (modal) return modal;
+
+  modal = document.createElement("div");
+  modal.id = "imageZoomModal";
+  modal.className = "image-zoom-modal";
+  modal.hidden = true;
+  document.body.append(modal);
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal || event.target.closest("[data-close-zoom]")) {
+      closeImageZoom();
+      return;
+    }
+    const image = event.target.closest(".zoom-image");
+    if (image) image.classList.toggle("zoomed");
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !modal.hidden) closeImageZoom();
+  });
+  return modal;
+}
+
+function openImageZoom(src, alt) {
+  const modal = ensureImageZoomModal();
+  modal.innerHTML = `
+    <button class="zoom-close" type="button" data-close-zoom aria-label="关闭">×</button>
+    <div class="zoom-stage">
+      <img class="zoom-image" src="${src}" alt="${alt}" referrerpolicy="no-referrer">
+      <span>点击图片放大 / 还原</span>
+    </div>
+  `;
+  modal.hidden = false;
+}
+
+function closeImageZoom() {
+  const modal = document.querySelector("#imageZoomModal");
+  if (!modal) return;
+  modal.hidden = true;
 }
 
 function renderResults(query, items) {
@@ -596,6 +779,7 @@ function renderResults(query, items) {
 
 function renderResultsView() {
   const visibleItems = sortedItems(filteredItems(currentItems));
+  ownDetailItems.clear();
 
   if (!visibleItems.length) {
     siteResults.innerHTML = `<div class="empty">这个平台暂时没有匹配结果。</div>`;
@@ -661,6 +845,13 @@ imageInput.addEventListener("change", () => {
 sortSelect.addEventListener("change", () => {
   activeSort = sortSelect.value;
   renderResultsView();
+});
+
+siteResults.addEventListener("click", (event) => {
+  const trigger = event.target.closest(".own-detail-trigger");
+  if (!trigger) return;
+  const item = ownDetailItems.get(trigger.dataset.detailKey);
+  if (item) openOwnDetail(item);
 });
 
 async function init() {
