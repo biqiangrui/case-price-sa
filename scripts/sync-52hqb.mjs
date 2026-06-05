@@ -15,7 +15,8 @@ const config = {
   hqbSite: env("HQB_SITE", "hqb"),
   cnyToSar: Number(env("CNY_TO_SAR", "0.52")),
   outDir: env("OUT_DIR", "work/52hqb-sync"),
-  dryRun: env("DRY_RUN", "0") === "1"
+  dryRun: env("DRY_RUN", "0") === "1",
+  featuredImageOverrides: parseFeaturedImageOverrides(env("HQB_FEATURED_IMAGE_OVERRIDES", ""))
 };
 
 const apiBase = "https://api.52dsy.com";
@@ -42,9 +43,13 @@ const products = [];
 for (const [index, item] of list.entries()) {
   const goodsId = String(item.goodsId ?? item.id);
   console.log(`[${index + 1}/${list.length}] ${goodsId} ${item.title ?? ""}`);
-  const info = await fetchHqbJson("/newapi/goods/goods/getGoodsInfo", { goodsId });
-  const detail = await fetchHqbEncrypted("/newapi/goods/goods/getGoodsDetailImage", { id: goodsId });
-  products.push(normalizeProduct(item, info.data, detail.data));
+  try {
+    const info = await fetchHqbJson("/newapi/goods/goods/getGoodsInfo", { goodsId });
+    const detail = await fetchHqbEncrypted("/newapi/goods/goods/getGoodsDetailImage", { id: goodsId });
+    products.push(normalizeProduct(item, info.data, detail.data));
+  } catch (error) {
+    console.warn(`[skip] ${goodsId}: ${error.message}`);
+  }
   await sleep(180);
 }
 
@@ -89,33 +94,53 @@ async function fetchHqbList(keyword, limit) {
 }
 
 async function fetchHqbJson(endpoint, body) {
-  const res = await fetch(`${apiBase}${endpoint}`, {
-    method: "POST",
-    headers: hqbHeaders(),
-    body: JSON.stringify(body)
+  return withRetry(endpoint, async () => {
+    const res = await fetch(`${apiBase}${endpoint}`, {
+      method: "POST",
+      headers: hqbHeaders(),
+      body: JSON.stringify(body)
+    });
+    const text = await res.text();
+    if (!res.ok) throw new Error(`${endpoint} failed ${res.status}: ${text.slice(0, 300)}`);
+    const json = JSON.parse(text);
+    if (json.code === -1 || json.status === 0) throw new Error(`${endpoint}: ${json.msg || "not authorized"}`);
+    return json;
   });
-  const text = await res.text();
-  if (!res.ok) throw new Error(`${endpoint} failed ${res.status}: ${text.slice(0, 300)}`);
-  const json = JSON.parse(text);
-  if (json.code === -1 || json.status === 0) throw new Error(`${endpoint}: ${json.msg || "not authorized"}`);
-  return json;
 }
 
 async function fetchHqbEncrypted(endpoint, body) {
-  const encryptedBody = await encryptFrontendBody(body);
-  const res = await fetch(`${apiBase}${endpoint}`, {
-    method: "POST",
-    headers: hqbHeaders(),
-    body: JSON.stringify(encryptedBody)
+  return withRetry(endpoint, async () => {
+    const encryptedBody = await encryptFrontendBody(body);
+    const res = await fetch(`${apiBase}${endpoint}`, {
+      method: "POST",
+      headers: hqbHeaders(),
+      body: JSON.stringify(encryptedBody)
+    });
+    const text = await res.text();
+    if (!res.ok) throw new Error(`${endpoint} failed ${res.status}: ${text.slice(0, 300)}`);
+    const json = JSON.parse(text);
+    if (json.code === -1 || json.status === 0) throw new Error(`${endpoint}: ${json.msg || "not authorized"}`);
+    if (json.status === 1 && json.data?.encryptedData) {
+      json.data = JSON.parse(await aesGcmDecrypt(json.data.encryptedData, encryptedResponseKey));
+    }
+    return json;
   });
-  const text = await res.text();
-  if (!res.ok) throw new Error(`${endpoint} failed ${res.status}: ${text.slice(0, 300)}`);
-  const json = JSON.parse(text);
-  if (json.code === -1 || json.status === 0) throw new Error(`${endpoint}: ${json.msg || "not authorized"}`);
-  if (json.status === 1 && json.data?.encryptedData) {
-    json.data = JSON.parse(await aesGcmDecrypt(json.data.encryptedData, encryptedResponseKey));
+}
+
+async function withRetry(label, run, attempts = 4) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      return await run();
+    } catch (error) {
+      lastError = error;
+      if (attempt === attempts) break;
+      const delay = 500 * attempt;
+      console.warn(`[retry ${attempt}/${attempts - 1}] ${label}: ${error.message}`);
+      await sleep(delay);
+    }
   }
-  return json;
+  throw lastError;
 }
 
 function hqbHeaders() {
@@ -144,6 +169,7 @@ function normalizeProduct(listItem, info = {}, detail = {}) {
     .flatMap((spec) => spec.items || [])
     .map((item) => absoluteImageUrl(item.imgSrc || item.thumbUrl))
     .filter(Boolean);
+  const orderedImages = chooseDisplayImages(goodsId, unique([...mainImages, ...descImages, ...specsImages, absoluteImageUrl(listItem.thumbUrl)]));
 
   return {
     source_platform: "52hqb",
@@ -154,8 +180,8 @@ function normalizeProduct(listItem, info = {}, detail = {}) {
     currency: "SAR",
     source_price: sourcePrice,
     source_currency: "CNY",
-    main_image_url: mainImages[0] || absoluteImageUrl(listItem.thumbUrl),
-    detail_images: unique([...descImages, ...mainImages.slice(1), ...specsImages]).slice(0, 20),
+    main_image_url: orderedImages[0] || absoluteImageUrl(listItem.thumbUrl),
+    detail_images: orderedImages.slice(1, 21),
     product_url: `${hqbBase}/good/${goodsId}`,
     display_url: "自有渠道报价",
     tags: buildTags(title, info, listItem),
@@ -276,8 +302,41 @@ function absoluteImageUrl(value) {
 
 function inferModel(title) {
   const text = title.toLowerCase();
-  const match = text.match(/iphone\\s*17\\s*pro\\s*max|iphone\\s*17\\s*pro|iphone\\s*17\\s*plus|iphone\\s*17|samsung\\s*s25\\s*ultra|samsung\\s*a56/i);
-  return match ? titleCase(match[0].replace(/\\s+/g, " ")) : "Phone Case";
+  const patterns = [
+    [/(?:iphone|苹果)\s*17\s*pro\s*max/i, "iPhone 17 Pro Max"],
+    [/(?:iphone|苹果)\s*17\s*pro/i, "iPhone 17 Pro"],
+    [/(?:iphone|苹果)\s*17\s*plus/i, "iPhone 17 Plus"],
+    [/(?:iphone|苹果)\s*17/i, "iPhone 17"],
+    [/iphone\s*16\s*pro\s*max/i, "iPhone 16 Pro Max"],
+    [/iphone\s*16\s*pro/i, "iPhone 16 Pro"],
+    [/iphone\s*16/i, "iPhone 16"],
+    [/iphone\s*15\s*pro\s*max/i, "iPhone 15 Pro Max"],
+    [/iphone\s*15\s*pro/i, "iPhone 15 Pro"],
+    [/iphone\s*15/i, "iPhone 15"],
+    [/samsung\s*s25\s*ultra/i, "Samsung S25 Ultra"],
+    [/samsung\s*s25/i, "Samsung S25"],
+    [/samsung\s*a56/i, "Samsung A56"]
+  ];
+  return patterns.find(([pattern]) => pattern.test(text))?.[1] || "Phone Case";
+}
+
+function chooseDisplayImages(goodsId, images) {
+  const list = unique(images).slice(0, 24);
+  const preferredIndex = config.featuredImageOverrides[goodsId];
+  if (Number.isInteger(preferredIndex) && list[preferredIndex]) {
+    const [preferred] = list.splice(preferredIndex, 1);
+    list.unshift(preferred);
+  }
+  return list;
+}
+
+function parseFeaturedImageOverrides(value) {
+  if (!value.trim()) return {};
+  try {
+    return JSON.parse(value);
+  } catch (error) {
+    throw new Error(`HQB_FEATURED_IMAGE_OVERRIDES must be JSON, for example {"12838421":1}: ${error.message}`);
+  }
 }
 
 function buildTags(title, info, listItem) {

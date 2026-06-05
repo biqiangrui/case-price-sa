@@ -286,6 +286,43 @@ async function loadProducts() {
     dataSourceName = "products.csv";
   }
 
+  async function loadRealHqbProducts() {
+    const response = await fetch("products-52hqb-real.json", { cache: "no-store" });
+    if (!response.ok) return [];
+    const rows = await response.json();
+    return visibleProducts(rows.map((row) => hydrateProduct({
+      id: row.source_id,
+      title: row.title,
+      model: row.model,
+      platform: "52hqb",
+      price: row.price,
+      currency: row.currency,
+      image_url: row.main_image_url,
+      product_url: row.product_url,
+      display_url: row.display_url,
+      tags: row.tags,
+      updated_at: row.updated_at,
+      detail_image_urls: row.detail_images,
+      source_price: row.source_price,
+      source_currency: row.source_currency,
+      source_payload: row.source_payload
+    })));
+  }
+
+  async function mergeRealHqbProducts() {
+    try {
+      const realItems = await loadRealHqbProducts();
+      if (!realItems.length) return;
+      productDatabase = [
+        ...productDatabase.filter((item) => item.site !== "52hqb"),
+        ...realItems
+      ];
+      dataSourceName = `${dataSourceName} + 52hqb 真实多图`;
+    } catch (error) {
+      console.warn("52hqb 真实多图数据加载失败。", error);
+    }
+  }
+
   if (window.SUPABASE_CONFIG?.url && window.SUPABASE_CONFIG?.anonKey) {
     try {
       const response = await fetch(`${window.SUPABASE_CONFIG.url}/rest/v1/products?select=*&order=updated_at.desc`, {
@@ -314,6 +351,7 @@ async function loadProducts() {
         source_payload: row.source_payload
       })));
       dataSourceName = "Supabase 云端数据库";
+      await mergeRealHqbProducts();
       return;
     } catch (error) {
       console.warn("Supabase 加载失败，改用 products.csv。", error);
@@ -322,6 +360,7 @@ async function loadProducts() {
 
   try {
     await loadCsvProducts();
+    await mergeRealHqbProducts();
   } catch (error) {
     siteResults.innerHTML = `<div class="empty">商品数据库加载失败，请确认 Supabase 配置或 products.csv 可以访问。</div>`;
     console.error(error);
@@ -569,6 +608,7 @@ function renderItem(item) {
       ${imageMarkup}
       <div class="result-copy">
         ${titleMarkup}
+        <span class="result-model">${item.model}</span>
         <p class="url">${publicDisplayUrl(item)}</p>
         <p class="desc">${publicDesc(item)}</p>
         <p class="freshness">更新：${formatDate(item.updatedAt)} · 来源：${publicSiteName(item.site)}</p>

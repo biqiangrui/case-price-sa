@@ -722,6 +722,20 @@ p {
   text-decoration: underline;
 }
 
+.result-model {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(11, 107, 67, 0.08);
+  color: var(--saudi-green);
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
 button.thumb {
   border: 0;
   padding: 0;
