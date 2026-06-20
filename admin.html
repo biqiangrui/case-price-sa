@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trivvo 采购申请管理</title>
+    <link rel="stylesheet" href="admin.css?v=20260613-noon-handoff">
+  </head>
+  <body>
+    <div class="admin-shell">
+      <header class="admin-header">
+        <a class="admin-brand" href="/" aria-label="返回 Trivvo">
+          <span></span>
+          <div><strong>trivvo</strong><small>采购申请管理后台</small></div>
+        </a>
+        <div class="admin-account">
+          <span id="adminIdentity">尚未登录</span>
+          <label class="auto-refresh" id="autoRefreshLabel" hidden><input id="autoRefresh" type="checkbox" checked> 自动刷新</label>
+          <button id="exportButton" type="button" hidden>导出 CSV</button>
+          <button id="refreshButton" type="button" hidden>刷新</button>
+          <button id="signOutButton" type="button" hidden>退出</button>
+        </div>
+      </header>
+
+      <main>
+        <section class="login-view" id="loginView">
+          <form class="admin-login" id="adminLoginForm">
+            <span>PRIVATE ADMIN</span>
+            <h1>采购申请管理后台</h1>
+            <p>仅限 Trivvo 管理员账号访问。</p>
+            <label>邮箱<input name="email" type="email" required autocomplete="email" placeholder="admin@example.com"></label>
+            <label>密码<input name="password" type="password" required autocomplete="current-password" placeholder="管理员密码"></label>
+            <button type="submit">登录后台</button>
+            <em id="loginMessage"></em>
+          </form>
+        </section>
+
+        <section class="admin-view" id="adminView" hidden>
+          <div class="metrics" id="metrics"></div>
+          <div class="workspace">
+            <aside class="filters">
+              <div class="filter-head"><strong>申请状态</strong><span id="requestCount">0</span></div>
+              <div id="statusFilters"></div>
+            </aside>
+            <section class="request-list-panel">
+              <div class="list-tools">
+                <div><h1>采购申请</h1><p>确认库存、报价和处理状态</p></div>
+                <input id="requestSearch" type="search" placeholder="搜索申请编号、姓名、WhatsApp">
+              </div>
+              <div class="request-list" id="requestList"></div>
+            </section>
+            <aside class="request-detail" id="requestDetail">
+              <div class="detail-empty"><strong>选择一个采购申请</strong><span>在这里查看商品并更新处理状态。</span></div>
+            </aside>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="supabase-config.js?v=20260604-supabase"></script>
+    <script src="admin.js?v=20260613-noon-handoff"></script>
+  </body>
+</html>

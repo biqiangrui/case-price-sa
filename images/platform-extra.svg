@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Extra">
+  <rect width="640" height="360" rx="28" fill="#101820"/>
+  <path d="M0 260h640v100H0z" fill="#00a3e0"/>
+  <circle cx="526" cy="88" r="86" fill="#00a3e0" opacity=".35"/>
+  <text x="78" y="200" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="98" font-weight="900" letter-spacing="-5">extra</text>
+  <text x="84" y="255" fill="#bfefff" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">electronics marketplace</text>
+</svg>

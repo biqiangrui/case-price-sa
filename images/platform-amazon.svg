@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Amazon.sa">
+  <rect width="640" height="360" rx="28" fill="#f5f7fa"/>
+  <rect x="0" y="0" width="640" height="110" fill="#101820"/>
+  <text x="74" y="201" fill="#111820" font-family="Arial, Helvetica, sans-serif" font-size="82" font-weight="800" letter-spacing="-4">amazon</text>
+  <text x="382" y="200" fill="#ff9900" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="800">.sa</text>
+  <path d="M158 236c103 46 216 42 321-12" fill="none" stroke="#ff9900" stroke-width="14" stroke-linecap="round"/>
+  <path d="M458 220l43-6-27 33" fill="none" stroke="#ff9900" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="78" y="286" fill="#4b5563" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700">Saudi retail prices</text>
+</svg>

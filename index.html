@@ -3,68 +3,207 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>沙特手机壳价格搜索</title>
-    <link rel="stylesheet" href="styles.css?v=20260605-gallery">
+    <title>TRIVVO Phone Cases</title>
+    <link rel="stylesheet" href="styles.css?v=20260620-kekeke-cute">
   </head>
   <body>
+    <div class="brand-announcement">
+      <button type="button" aria-label="上一条">‹</button>
+      <strong>TRIVVO New Arrival! Fresh Phone Cases Updated Daily</strong>
+      <button type="button" aria-label="下一条">›</button>
+    </div>
+    <header class="store-header">
+      <button class="store-menu" type="button" aria-label="菜单">Menu</button>
+      <a class="store-logo" href="/" aria-label="返回 trivvo 主页">TRI<span>V</span>VO</a>
+      <div class="store-actions">
+        <button id="memberTriggerTop" type="button" aria-label="会员中心">SA / EN</button>
+        <button id="cartTriggerTop" type="button" aria-label="打开购物车">Cart</button>
+      </div>
+    </header>
+    <nav class="brand-category-nav" aria-label="热门手机壳分类">
+      <button type="button" data-store-category="all">New & Featured</button>
+      <button type="button" data-store-category="clear">Categories</button>
+      <button type="button" data-store-category="fun">TRIVVO Vibes</button>
+      <button type="button" data-store-category="protective">Device</button>
+      <button type="button" data-store-category="magsafe">Co-Lab</button>
+      <button type="button" data-store-category="all">Discover</button>
+    </nav>
     <main class="app home" id="app">
       <section class="search-stage">
-        <div class="search-intro">
-          <p>沙特市场价格数据</p>
-          <h1>沙特手机壳价格搜索</h1>
-        </div>
+        <a class="brand-lockup" href="/" aria-label="返回 trivvo 主页">
+          <div class="brand-mark">
+          </div>
+          <div>
+            <strong>trivvo</strong>
+            <span>www.trivvo.com</span>
+          </div>
+        </a>
 
         <form class="search-box" id="searchForm">
-          <input id="searchInput" type="search" placeholder="搜索 iPhone 17 Pro Max 手机壳价格" autocomplete="off">
-          <label class="image-button" title="图片搜索">
+          <button class="search-type" type="button" data-i18n="product">商品</button>
+          <input id="searchInput" type="search" placeholder="搜索 iPhone 17 Pro Max 手机壳价格" data-i18n-placeholder="searchPlaceholder" autocomplete="off">
+          <label class="image-button" title="上传图片并输入型号" data-i18n-title="imageSearchTitle">
             <input id="imageInput" type="file" accept="image/*">
-            <span>图片</span>
+            <span>📷</span>
           </label>
-          <button type="submit">搜索</button>
+          <button class="search-submit" type="submit"><span>⌕</span> <i data-i18n="search">搜索</i></button>
         </form>
 
-        <div class="quick-searches" id="quickSearches"></div>
+        <div class="header-actions">
+          <button class="member-trigger" id="memberTrigger" type="button">登录 / 免费注册</button>
+          <label class="language-picker">
+            <span data-i18n="language">语言</span>
+            <select aria-label="选择语言">
+              <option value="zh-CN">简体中文</option>
+              <option value="en">English</option>
+              <option value="ar">العربية</option>
+              <option value="ja">日本語</option>
+              <option value="ko">한국어</option>
+              <option value="tr">Türkçe</option>
+            </select>
+          </label>
+        </div>
+
+        <nav class="device-browser" aria-label="按手机型号浏览">
+          <strong data-i18n="shopByDevice">按手机型号浏览</strong>
+          <div>
+            <button type="button" data-device-query="iPhone 17 Pro Max">iPhone 17 Pro Max</button>
+            <button type="button" data-device-query="iPhone 17 Pro">iPhone 17 Pro</button>
+            <button type="button" data-device-query="iPhone 17">iPhone 17</button>
+            <button type="button" data-device-query="Samsung S25 Ultra">Samsung S25 Ultra</button>
+          </div>
+        </nav>
+
+        <aside class="latest-sidebar" aria-label="最新动态">
+          <div class="latest-head">
+            <strong data-i18n="latest">最新动态</strong>
+            <span>Live</span>
+          </div>
+          <div class="latest-window">
+            <div class="latest-track" id="latestTrack">
+              <p><strong data-i18n="loading">加载中</strong><span data-i18n="loadingCases">正在读取最新手机壳资料。</span></p>
+            </div>
+          </div>
+        </aside>
+
+        <section class="home-gallery" aria-label="手机壳大图">
+          <img class="featured-case" src="https://img.goooy.cn/files/983/983c2ac355c74c8767ebb07d38b9ee5e_65696.jpg" alt="iPhone 17 Pro Max 手机壳" referrerpolicy="no-referrer">
+          <div>
+            <img src="https://img.goooy.cn/files/bba/bba0954d10c0d983e4d3b3712b2aa710_906641.jpg" alt="液态硅胶手机壳" referrerpolicy="no-referrer">
+            <img src="https://img.goooy.cn/files/0b2/0b2147730b958caeea8408d56674ec00_608811.JPG" alt="花朵手机壳" referrerpolicy="no-referrer">
+            <img src="https://img.goooy.cn/files/934/93400e73bc91e67ce1378ed2039ae78a_542864.jpg" alt="皮革手机壳" referrerpolicy="no-referrer">
+            <img src="https://img.goooy.cn/files/926/926e7d1c3aaf98010d4dea0f30df981d_189113.jpg" alt="支架手机壳" referrerpolicy="no-referrer">
+          </div>
+        </section>
+
+        <aside class="home-proof" aria-label="价格优势">
+          <strong data-i18n="priceAdvantage">价格优势</strong>
+          <span data-i18n="proofSubtitle">真实商品图 · 多平台对比 · 自有报价</span>
+          <div>
+            <p><b>73</b><small data-i18n="ownProducts">自有商品</small></p>
+            <p><b id="platformCount">6</b><small data-i18n="saudiPlatforms">沙特平台</small></p>
+            <p><b data-i18n="hd">高清</b><small data-i18n="multiImageDetails">多图详情</small></p>
+          </div>
+        </aside>
       </section>
 
       <section class="platforms" id="platforms">
         <div class="platforms-head">
-          <h1>沙特主流购物平台</h1>
-          <p>查看客户熟悉的网站价格，快速对比同款手机壳行情。</p>
+          <h1 data-i18n="saudiMainPlatforms">沙特主流购物平台</h1>
+          <p data-i18n="platformSubtitle">查看客户熟悉的网站价格，快速对比同款手机壳行情。</p>
         </div>
         <div id="platformGrid" class="platform-grid"></div>
+      </section>
+
+      <section class="cb-collections" aria-label="热门系列">
+        <button class="cb-track-arrow cb-track-prev" type="button" aria-label="向左滑动">‹</button>
+        <div class="cb-collection-track" id="homeCollections"></div>
+        <button class="cb-track-arrow cb-track-next" type="button" aria-label="向右滑动">›</button>
+      </section>
+
+      <section class="store-favorites" id="storeFavorites">
+        <div class="store-section-head">
+          <h1>Find Your Favorites</h1>
+          <p>Choose a style and submit a sourcing request.</p>
+        </div>
+        <div class="store-category-pills" id="storeCategoryPills">
+          <button class="active" type="button" data-store-filter="all">New Cases</button>
+          <button type="button" data-store-filter="magsafe">MagSafe</button>
+          <button type="button" data-store-filter="clear">Clear Cases</button>
+          <button type="button" data-store-filter="protective">Protective</button>
+          <button type="button" data-store-filter="fun">Fun Styles</button>
+        </div>
+        <div class="store-product-grid" id="storeProductGrid"></div>
+        <button class="cb-view-more" type="button" data-store-category="all">View more</button>
+      </section>
+
+      <section class="cb-story" id="cbStory">
+        <div class="cb-story-copy">
+          <span>TRIVVO STYLE LAB</span>
+          <h2>Switch Your Case.<br>Switch Your Mood.</h2>
+          <p>Fresh phone cases selected for every outfit, every day and every mood.</p>
+          <button type="button" data-store-category="fun">SHOP THE COLLECTION</button>
+        </div>
+        <div class="cb-story-grid" id="cbStoryGrid"></div>
+      </section>
+
+      <section class="cb-series" id="cbSeriesOne">
+        <div class="cb-series-hero">
+          <span>MOST LOVED SERIES</span>
+          <h2>Soft Colors,<br>Fresh Daily Looks.</h2>
+          <p>Clean silicone, clear cases and bright summer colors for young Saudi customers.</p>
+          <button type="button" data-store-category="clear">SHOP CLEAR CASES</button>
+        </div>
+        <div class="cb-series-row" id="cbSeriesRowOne"></div>
+      </section>
+
+      <section class="cb-series cb-series-alt" id="cbSeriesTwo">
+        <div class="cb-series-hero">
+          <span>MAGSAFE PICKS</span>
+          <h2>Protective Cases<br>With Smart Details.</h2>
+          <p>MagSafe, stand and shockproof styles selected from the TRIVVO catalog.</p>
+          <button type="button" data-store-category="magsafe">SHOP MAGSAFE</button>
+        </div>
+        <div class="cb-series-row" id="cbSeriesRowTwo"></div>
       </section>
 
       <section class="results" id="results" aria-live="polite">
         <div class="results-head">
           <div>
-            <h1 id="resultTitle">搜索结果</h1>
+            <h1 id="resultTitle" data-i18n="searchResults">搜索结果</h1>
             <p id="resultMeta"></p>
           </div>
-          <span class="source-link">我们的报价</span>
+          <span class="source-link" data-i18n="ourQuote">我们的报价</span>
         </div>
-
-        <div class="price-insights" id="priceInsights"></div>
-        <div class="data-trust" id="dataTrust"></div>
-        <div class="match-compare" id="matchCompare"></div>
 
         <div class="result-tools">
           <div class="filter-tabs" id="filterTabs" aria-label="平台筛选"></div>
           <label class="sort-control">
-            <span>排序</span>
+            <span data-i18n="sort">排序</span>
             <select id="sortSelect">
-              <option value="recommended">推荐</option>
-              <option value="price-low">价格从低到高</option>
-              <option value="price-high">价格从高到低</option>
-              <option value="newest">最新数据</option>
+              <option value="recommended" data-i18n="recommended">推荐</option>
+              <option value="price-low" data-i18n="priceLow">价格从低到高</option>
+              <option value="price-high" data-i18n="priceHigh">价格从高到低</option>
+              <option value="newest" data-i18n="newest">最新数据</option>
             </select>
           </label>
         </div>
 
         <div id="siteResults" class="site-results"></div>
+
+        <div class="price-insights" id="priceInsights"></div>
+        <div class="data-trust" id="dataTrust"></div>
+        <div class="match-compare" id="matchCompare"></div>
       </section>
     </main>
 
+    <button class="cart-trigger" id="cartTrigger" type="button" aria-label="打开购物车">
+      <span aria-hidden="true">🛒</span>
+      <strong>购物车</strong>
+      <em id="cartCount">0</em>
+    </button>
+
     <script src="supabase-config.js?v=20260604-supabase"></script>
-    <script src="app.js?v=20260605-gallery"></script>
+    <script src="app.js?v=20260620-kekeke-cute"></script>
   </body>
 </html>

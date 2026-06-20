@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="Noon">
+  <rect width="640" height="360" rx="28" fill="#feee00"/>
+  <circle cx="512" cy="82" r="82" fill="#fff7a8" opacity=".9"/>
+  <path d="M74 244c72-86 158-129 258-129 85 0 162 28 234 84" fill="none" stroke="#111" stroke-width="14" stroke-linecap="round" opacity=".14"/>
+  <text x="86" y="207" fill="#171717" font-family="Arial, Helvetica, sans-serif" font-size="104" font-weight="900" letter-spacing="-7">noon</text>
+  <text x="92" y="258" fill="#171717" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700">Saudi marketplace</text>
+</svg>
