@@ -6062,6 +6062,925 @@ body {
   }
 }
 
+/* TRIVVO final refinement - must stay last */
+.brand-announcement {
+  background: #ffc4d8 !important;
+}
+
+.store-logo {
+  color: #ff3048 !important;
+}
+
+.app.home .home-gallery {
+  height: min(40vw, 560px) !important;
+  min-height: 410px !important;
+}
+
+.app.home .home-featured-button {
+  background:
+    radial-gradient(circle at 80% 18%, rgba(255, 255, 255, 0.7) 0 8%, transparent 8.3%),
+    linear-gradient(112deg, #f3a3c4 0 43%, #ffd7e5 43% 100%) !important;
+}
+
+.cb-hero-copy {
+  gap: 18px !important;
+}
+
+.cb-hero-copy small {
+  width: fit-content !important;
+  padding: 8px 13px !important;
+  border-radius: 999px !important;
+  background: #111 !important;
+  color: #fff !important;
+  font-size: 11px !important;
+}
+
+.cb-hero-copy strong {
+  max-width: 560px !important;
+  color: #111 !important;
+  line-height: 0.9 !important;
+}
+
+.cb-hero-copy em {
+  display: block !important;
+  max-width: 330px !important;
+  overflow: visible !important;
+  color: #2f2f2f !important;
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+}
+
+.cb-hero-copy b,
+.cb-story-copy button,
+.cb-series-hero button,
+.cb-view-more,
+.result-action {
+  border-radius: 999px !important;
+}
+
+.app.home .home-gallery .featured-case {
+  width: min(62%, 470px) !important;
+  height: 88% !important;
+  padding: 12px !important;
+  border-radius: 26px !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  object-fit: contain !important;
+  box-shadow: 0 18px 52px rgba(17, 17, 17, 0.12) !important;
+}
+
+.app.home .home-thumbs {
+  border-radius: 22px !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+.app.home .home-thumbs button {
+  border-radius: 15px !important;
+}
+
+.app.home .home-thumbs img {
+  border-radius: 15px !important;
+  object-fit: cover !important;
+}
+
+.cb-collection-card,
+.store-product-image,
+.result-item {
+  border-radius: 22px !important;
+}
+
+.store-category-pills {
+  gap: 8px !important;
+}
+
+.store-category-pills button {
+  border-right: 1px solid #d8d8d8 !important;
+  border-radius: 999px !important;
+}
+
+.store-section-head h1 {
+  font-size: clamp(30px, 3.8vw, 48px) !important;
+}
+
+.store-product-image {
+  background: #fafafa !important;
+  box-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.04) !important;
+}
+
+.store-product-open > img {
+  transition: transform 220ms ease !important;
+}
+
+.store-product-image:hover .store-product-open > img {
+  transform: scale(1.04) rotate(-1deg) !important;
+}
+
+.app.has-results {
+  background: #fff8fb !important;
+}
+
+.app.has-results .search-stage {
+  display: grid !important;
+  max-width: 1320px !important;
+  padding-top: 22px !important;
+}
+
+.app.has-results .cb-collections,
+.app.has-results .store-favorites,
+.app.has-results .cb-story,
+.app.has-results .cb-series {
+  display: none !important;
+}
+
+.app.has-results .search-stage > :not(.search-box):not(.brand-lockup):not(.header-actions):not(.device-browser) {
+  display: none !important;
+}
+
+.app.has-results .search-box {
+  border-radius: 999px !important;
+}
+
+.app.has-results .results {
+  max-width: 1320px !important;
+  padding: 0 18px 60px !important;
+}
+
+.site-block-own {
+  padding: 22px !important;
+  border-radius: 28px !important;
+  background: #fff !important;
+  box-shadow: 0 18px 60px rgba(17, 17, 17, 0.07) !important;
+}
+
+.site-block-own .site-head {
+  margin-bottom: 8px !important;
+}
+
+.result-list {
+  gap: 20px !important;
+}
+
+.result-item {
+  overflow: hidden !important;
+  background: #fff !important;
+}
+
+.result-title-text,
+.result-copy > a {
+  color: #111 !important;
+}
+
+.result-item .price strong {
+  color: #ff3048 !important;
+}
+
+@media (max-width: 760px) {
+  .brand-announcement {
+    min-height: 34px !important;
+    padding: 0 34px !important;
+    text-align: center !important;
+  }
+
+  .brand-announcement strong {
+    display: block !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .store-actions {
+    gap: 4px !important;
+  }
+
+  .store-actions button {
+    min-width: 34px !important;
+    height: 34px !important;
+    padding: 0 5px !important;
+    font-size: 10px !important;
+  }
+
+  .brand-category-nav {
+    scrollbar-width: none !important;
+  }
+
+  .brand-category-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .app.home .home-gallery {
+    height: 586px !important;
+    min-height: 586px !important;
+  }
+
+  .app.home .home-featured-button {
+    grid-template-rows: 44% 56% !important;
+  }
+
+  .cb-hero-copy {
+    padding: 24px 18px 6px !important;
+  }
+
+  .cb-hero-copy strong {
+    max-width: 340px !important;
+    font-size: 39px !important;
+  }
+
+  .cb-hero-copy em {
+    max-width: 280px !important;
+    font-size: 13px !important;
+  }
+
+  .app.home .home-gallery .featured-case {
+    width: 64% !important;
+    height: 82% !important;
+  }
+
+  .app.home .home-thumbs {
+    left: 14px !important;
+    right: 14px !important;
+    bottom: 16px !important;
+    width: auto !important;
+  }
+
+  .store-section-head h1 {
+    font-size: 27px !important;
+  }
+
+  .store-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .app.has-results .search-stage {
+    grid-template-columns: 1fr !important;
+    padding: 16px 12px 0 !important;
+  }
+
+  .app.has-results .brand-lockup,
+  .app.has-results .search-box,
+  .app.has-results .header-actions,
+  .app.has-results .device-browser {
+    grid-column: 1 !important;
+  }
+
+  .app.has-results .results {
+    padding: 0 12px 44px !important;
+  }
+
+  .result-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+  }
+
+  .site-block-own {
+    padding: 14px !important;
+    border-radius: 22px !important;
+  }
+}
+
+/* TRIVVO polish pass */
+:root {
+  --trivvo-red: #ff3048;
+  --trivvo-pink: #ffe4ec;
+  --trivvo-mint: #dff7ef;
+  --trivvo-cream: #fff7e7;
+  --trivvo-ink: #151515;
+}
+
+body {
+  color: var(--trivvo-ink);
+  background:
+    linear-gradient(180deg, #fff 0%, #fff 54%, #fff8fb 100%);
+}
+
+.brand-announcement {
+  height: 34px !important;
+  background: #111 !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  letter-spacing: 0 !important;
+}
+
+.brand-announcement strong {
+  font-weight: 900 !important;
+}
+
+.store-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 18 !important;
+  min-height: 66px !important;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+.store-menu,
+.store-actions button {
+  border: 1px solid rgba(17, 17, 17, 0.14) !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  color: #111 !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+}
+
+.store-logo {
+  color: var(--trivvo-red) !important;
+  font-family: Arial Black, Arial, sans-serif !important;
+  letter-spacing: 0 !important;
+}
+
+.brand-category-nav {
+  position: sticky !important;
+  top: 66px !important;
+  z-index: 17 !important;
+  min-height: 44px !important;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+.brand-category-nav button {
+  color: #111 !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+}
+
+.app.home {
+  padding-top: 18px !important;
+}
+
+.app.home .search-stage {
+  grid-template-columns: minmax(180px, 230px) minmax(620px, 1fr) minmax(160px, 190px) !important;
+  gap: 16px !important;
+  max-width: 1420px !important;
+  padding: 0 18px !important;
+}
+
+.app.home .brand-lockup {
+  align-self: stretch !important;
+  grid-template-columns: 1fr !important;
+  align-content: center !important;
+  justify-items: start !important;
+  gap: 4px !important;
+  padding: 0 4px !important;
+}
+
+.app.home .brand-mark {
+  display: none !important;
+}
+
+.app.home .brand-lockup strong {
+  color: var(--trivvo-red) !important;
+  font-family: Arial Black, Arial, sans-serif !important;
+  font-size: 36px !important;
+  text-transform: uppercase !important;
+}
+
+.app.home .brand-lockup span {
+  margin-top: 1px !important;
+  color: #777 !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+.app.home .search-box {
+  grid-column: 2 / 3 !important;
+  min-height: 46px !important;
+  border: 2px solid var(--trivvo-red) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 12px 30px rgba(255, 48, 72, 0.08) !important;
+}
+
+.app.home .search-type {
+  font-size: 15px !important;
+}
+
+.app.home .search-submit {
+  border-radius: 0 999px 999px 0 !important;
+}
+
+.app.home .header-actions {
+  grid-column: 3 !important;
+}
+
+.app.home .member-trigger {
+  display: none !important;
+}
+
+.app.home .language-picker {
+  min-width: 168px !important;
+  height: 46px !important;
+  border-radius: 999px !important;
+  font-size: 13px !important;
+}
+
+.app.home .device-browser {
+  grid-column: 1 / -1 !important;
+  justify-content: center !important;
+  padding: 4px 0 0 !important;
+}
+
+.app.home .device-browser strong {
+  display: none !important;
+}
+
+.app.home .device-browser div {
+  justify-content: center !important;
+}
+
+.app.home .device-browser button,
+.app.home .device-browser button:nth-child(n) {
+  min-width: 0 !important;
+  height: 34px !important;
+  border: 1px solid rgba(255, 48, 72, 0.22) !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  color: var(--trivvo-red) !important;
+  box-shadow: 0 8px 22px rgba(255, 48, 72, 0.06) !important;
+}
+
+.app.home .latest-sidebar,
+.app.home .home-proof {
+  height: 540px !important;
+  border: 0 !important;
+  border-radius: 24px !important;
+  background: #fff !important;
+  box-shadow: 0 18px 55px rgba(17, 17, 17, 0.08) !important;
+}
+
+.app.home .latest-sidebar {
+  grid-column: 1 !important;
+  grid-row: 3 !important;
+  overflow: hidden !important;
+}
+
+.app.home .latest-head {
+  height: 52px !important;
+  padding: 0 16px !important;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.06) !important;
+}
+
+.app.home .latest-head strong {
+  color: #111 !important;
+  font-size: 15px !important;
+  font-weight: 900 !important;
+}
+
+.app.home .latest-head span {
+  background: var(--trivvo-red) !important;
+  color: #fff !important;
+}
+
+.app.home .latest-window {
+  height: 488px !important;
+  overflow: hidden !important;
+}
+
+.app.home .latest-track {
+  display: grid !important;
+  grid-auto-flow: row !important;
+  grid-auto-columns: auto !important;
+  width: auto !important;
+  gap: 10px !important;
+  padding: 12px !important;
+  animation: latest-scroll 58s linear infinite !important;
+}
+
+.app.home .latest-item {
+  width: 100% !important;
+  min-height: 92px !important;
+  border: 0 !important;
+  border-radius: 16px !important;
+  background: #fff7f9 !important;
+}
+
+.app.home .latest-item img {
+  width: 64px !important;
+  height: 72px !important;
+  border-radius: 14px !important;
+  object-fit: cover !important;
+}
+
+.app.home .home-gallery {
+  grid-column: 2 !important;
+  grid-row: 3 !important;
+  height: 540px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 30px !important;
+  background: linear-gradient(135deg, var(--trivvo-pink) 0%, #fff 47%, var(--trivvo-mint) 100%) !important;
+  box-shadow: 0 22px 70px rgba(255, 48, 72, 0.13) !important;
+}
+
+.app.home .home-featured-button {
+  grid-template-columns: minmax(270px, 0.88fr) minmax(320px, 1.12fr) !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+}
+
+.app.home .cb-hero-copy {
+  justify-content: center !important;
+  gap: 18px !important;
+  padding: 46px 28px 46px 44px !important;
+}
+
+.app.home .cb-hero-copy small {
+  width: fit-content !important;
+  padding: 8px 12px !important;
+  border-radius: 999px !important;
+  background: #111 !important;
+  color: #fff !important;
+  font-size: 11px !important;
+}
+
+.app.home .cb-hero-copy strong {
+  color: #111 !important;
+  font-size: clamp(44px, 5vw, 76px) !important;
+  line-height: 0.92 !important;
+}
+
+.app.home .cb-hero-copy em {
+  max-width: 300px !important;
+  color: #3d3d3d !important;
+  font-size: 15px !important;
+}
+
+.app.home .cb-hero-copy b,
+.cb-story-copy button,
+.cb-series-hero button,
+.cb-view-more,
+.result-action {
+  border-radius: 999px !important;
+  background: #111 !important;
+  color: #fff !important;
+}
+
+.app.home .cb-hero-visual {
+  align-content: center !important;
+  padding: 24px 32px 24px 8px !important;
+}
+
+.app.home .cb-hero-visual .featured-case {
+  width: 100% !important;
+  height: 430px !important;
+  padding: 14px !important;
+  border-radius: 26px !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  object-fit: contain !important;
+  box-shadow: 0 18px 50px rgba(17, 17, 17, 0.12) !important;
+}
+
+.app.home .cb-hero-visual i {
+  right: 48px !important;
+  bottom: 44px !important;
+  color: rgba(255, 48, 72, 0.9) !important;
+}
+
+.app.home .home-thumbs {
+  right: 18px !important;
+  bottom: 18px !important;
+  left: auto !important;
+  width: min(310px, 42%) !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  padding: 8px !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.78) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.app.home .home-thumbs button {
+  aspect-ratio: 1 / 1 !important;
+  border-radius: 13px !important;
+}
+
+.app.home .home-thumbs img {
+  object-fit: cover !important;
+}
+
+.app.home .home-proof {
+  grid-column: 3 !important;
+  grid-row: 3 !important;
+  align-content: space-between !important;
+  padding: 20px !important;
+  background: #111 !important;
+  color: #fff !important;
+}
+
+.app.home .home-proof > strong {
+  color: #fff !important;
+  font-size: 22px !important;
+  line-height: 1.1 !important;
+}
+
+.app.home .home-proof > span {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.app.home .home-proof p {
+  display: grid !important;
+  gap: 4px !important;
+  padding: 14px !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.app.home .home-proof b {
+  color: #fff !important;
+  font-size: 24px !important;
+}
+
+.app.home .home-proof small {
+  color: rgba(255, 255, 255, 0.68) !important;
+}
+
+.platforms {
+  display: none !important;
+}
+
+.cb-collections {
+  max-width: 1420px !important;
+  margin: 28px auto 0 !important;
+  padding: 0 18px 12px !important;
+}
+
+.cb-collection-track {
+  padding: 0 0 12px !important;
+}
+
+.cb-collection-card {
+  border: 0 !important;
+  border-radius: 24px !important;
+  box-shadow: 0 16px 40px rgba(17, 17, 17, 0.08) !important;
+}
+
+.store-favorites {
+  max-width: 1420px !important;
+  border-radius: 32px !important;
+}
+
+.store-section-head {
+  margin-bottom: 22px !important;
+}
+
+.store-section-head h1 {
+  font-size: clamp(30px, 4vw, 54px) !important;
+  line-height: 0.98 !important;
+}
+
+.store-category-pills {
+  justify-content: center !important;
+}
+
+.store-category-pills button {
+  min-height: 42px !important;
+  padding: 0 18px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(17, 17, 17, 0.12) !important;
+  background: #fff !important;
+}
+
+.store-category-pills button + button {
+  margin-left: 8px !important;
+}
+
+.store-product-grid {
+  gap: 34px 18px !important;
+}
+
+.store-product-card {
+  position: relative !important;
+}
+
+.store-product-image {
+  border-radius: 24px !important;
+  background: #f8f8f8 !important;
+  box-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.04) !important;
+}
+
+.store-product-open > img {
+  transition: transform 220ms ease !important;
+}
+
+.store-product-image:hover .store-product-open > img {
+  transform: scale(1.04) rotate(-1deg) !important;
+}
+
+.store-product-title {
+  margin-top: 12px !important;
+  color: #111 !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+}
+
+.store-product-price {
+  color: var(--trivvo-red) !important;
+}
+
+.cb-story {
+  background: linear-gradient(135deg, #ffd6e2 0%, #fff1b8 100%) !important;
+}
+
+.cb-series-hero {
+  background: linear-gradient(135deg, #ffecf2 0%, #ffe38b 100%) !important;
+}
+
+.cb-series-alt .cb-series-hero {
+  background: linear-gradient(135deg, #dff7ef 0%, #dfeaff 100%) !important;
+}
+
+.cb-story,
+.cb-series {
+  overflow: hidden !important;
+}
+
+.cb-story-copy h2,
+.cb-series-hero h2 {
+  color: #111 !important;
+}
+
+.cb-series-product img,
+.cb-story-grid img {
+  transition: transform 220ms ease !important;
+}
+
+.cb-series-product:hover img,
+.cb-story-grid button:hover img {
+  transform: scale(1.035) !important;
+}
+
+.app.has-results .search-stage {
+  max-width: 1180px !important;
+}
+
+.app.has-results .results {
+  max-width: 1320px !important;
+}
+
+.site-head {
+  padding: 0 4px !important;
+}
+
+.site-title {
+  font-size: 21px !important;
+}
+
+.result-item {
+  border: 0 !important;
+  border-radius: 24px !important;
+  box-shadow: 0 16px 44px rgba(17, 17, 17, 0.07) !important;
+}
+
+.result-item .thumb {
+  background: #fafafa !important;
+}
+
+.favorite-button {
+  top: 10px !important;
+  right: 10px !important;
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.86) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+@media (max-width: 1120px) {
+  .app.home .search-stage {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .app.home .brand-lockup,
+  .app.home .search-box,
+  .app.home .header-actions,
+  .app.home .device-browser,
+  .app.home .latest-sidebar,
+  .app.home .home-gallery,
+  .app.home .home-proof {
+    grid-column: 1 !important;
+  }
+
+  .app.home .brand-lockup { grid-row: 1 !important; }
+  .app.home .search-box { grid-row: 2 !important; }
+  .app.home .header-actions { grid-row: 3 !important; justify-self: stretch !important; }
+  .app.home .device-browser { grid-row: 4 !important; }
+  .app.home .home-gallery { grid-row: 5 !important; }
+  .app.home .latest-sidebar { grid-row: 6 !important; }
+  .app.home .home-proof { grid-row: 7 !important; height: auto !important; }
+
+  .app.home .latest-sidebar {
+    height: 260px !important;
+  }
+
+  .app.home .latest-window {
+    height: 208px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .brand-category-nav {
+    top: 58px !important;
+  }
+
+  .app.home {
+    padding-inline: 10px !important;
+  }
+
+  .app.home .search-stage {
+    padding: 0 !important;
+  }
+
+  .app.home .brand-lockup {
+    justify-items: center !important;
+  }
+
+  .app.home .brand-lockup strong {
+    font-size: 32px !important;
+  }
+
+  .app.home .search-box {
+    grid-template-columns: 74px 1px minmax(0, 1fr) 42px 82px !important;
+  }
+
+  .app.home .search-type,
+  .app.home .search-submit {
+    font-size: 13px !important;
+  }
+
+  .app.home .home-gallery {
+    height: 610px !important;
+    border-radius: 24px !important;
+  }
+
+  .app.home .home-featured-button {
+    grid-template-rows: auto 1fr !important;
+  }
+
+  .app.home .cb-hero-copy {
+    padding: 26px 22px 10px !important;
+  }
+
+  .app.home .cb-hero-copy strong {
+    font-size: 42px !important;
+  }
+
+  .app.home .cb-hero-copy em {
+    max-width: 310px !important;
+    margin-inline: auto !important;
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+  }
+
+  .app.home .cb-hero-visual {
+    padding: 10px 18px 88px !important;
+  }
+
+  .app.home .cb-hero-visual .featured-case {
+    height: 330px !important;
+  }
+
+  .app.home .home-thumbs {
+    left: 14px !important;
+    right: 14px !important;
+    width: auto !important;
+  }
+
+  .store-product-grid {
+    gap: 26px 12px !important;
+  }
+
+  .store-favorites {
+    overflow: hidden !important;
+  }
+
+  .store-section-head {
+    padding-inline: 8px !important;
+    text-align: center !important;
+  }
+
+  .store-section-head h1 {
+    max-width: 100% !important;
+    font-size: 28px !important;
+    line-height: 1.05 !important;
+    white-space: normal !important;
+  }
+
+  .store-category-pills {
+    justify-content: flex-start !important;
+    overflow-x: auto !important;
+    padding: 0 10px 8px !important;
+    scrollbar-width: none !important;
+  }
+
+  .store-category-pills::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
 /* Final storefront layout: mirrors the CaseBang homepage rhythm. */
 html,
 body {

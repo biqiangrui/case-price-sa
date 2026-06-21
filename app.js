@@ -1955,7 +1955,7 @@ function renderResults(query, items) {
   renderMatchCompare(items);
   renderFilters(items);
   renderResultsView();
-  requestAnimationFrame(() => results.scrollIntoView({ block: "start" }));
+  requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
 }
 
 function renderResultsView() {
@@ -2231,7 +2231,7 @@ function renderHomeGallery() {
       <span class="cb-hero-copy">
         <small>NEW &amp; FEATURED</small>
         <strong>Snap Your<br>Daily Style.</strong>
-        <em>Fresh phone case drops selected for Saudi trend lovers.</em>
+        <em>Fresh cute cases for every outfit.</em>
         <b>SHOP NEW CASES</b>
       </span>
       <span class="cb-hero-visual">
@@ -2502,6 +2502,8 @@ async function init() {
   renderStoryProducts();
   renderSeriesSections();
   if (platformCount) platformCount.textContent = String(procurementPlatforms.length);
+  const initialQuery = new URLSearchParams(window.location.search).get("q");
+  if (initialQuery?.trim()) submitSearch(initialQuery.trim());
 }
 
 init();
