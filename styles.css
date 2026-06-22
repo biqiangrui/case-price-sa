@@ -7282,6 +7282,20 @@ body {
   text-transform: none !important;
 }
 
+.brand-category-nav button.active {
+  color: #ff3048 !important;
+}
+
+.brand-category-nav button.active::after {
+  display: block !important;
+  width: 100% !important;
+  height: 3px !important;
+  margin-top: 7px !important;
+  border-radius: 999px !important;
+  background: #ff3048 !important;
+  content: "" !important;
+}
+
 .app.home {
   max-width: none !important;
   padding: 0 !important;

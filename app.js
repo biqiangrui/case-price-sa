@@ -2086,7 +2086,11 @@ function homeGalleryCandidates() {
 
 function storeFilterMatches(item, filter) {
   const text = normalize(`${item.title} ${item.tags.join(" ")} ${productMaterial(item)}`);
+  if (filter === "cute") return /卡通|可爱|kt|hello|猫|狗|小熊|动物|图案|diy|ins|cartoon|cute/.test(text);
   if (filter === "magsafe") return /magsafe|磁吸/.test(text);
+  if (filter === "heart") return /爱心|情侣|甜|粉|heart|love/.test(text);
+  if (filter === "animal") return /猫|狗|熊|动物|kt|hello|头像|腊肠|小熊/.test(text);
+  if (filter === "iphone17") return /iphone\\s*17|17\\s*pro|max/.test(text);
   if (filter === "clear") return /透明|clear|亚克力/.test(text);
   if (filter === "protective") return /防摔|protective|armor|全包/.test(text);
   if (filter === "fun") return /卡通|花|可爱|链|图案|fun/.test(text);
@@ -2169,8 +2173,21 @@ function renderSeriesRow(target, filter, offset = 0) {
 }
 
 function renderSeriesSections() {
-  renderSeriesRow(cbSeriesRowOne, "clear", 0);
+  renderSeriesRow(cbSeriesRowOne, "heart", 0);
   renderSeriesRow(cbSeriesRowTwo, "magsafe", 2);
+}
+
+function setStoreFilter(filter, shouldScroll = false) {
+  activeStoreFilter = filter || "all";
+  storeProductLimit = 6;
+  document.querySelectorAll("[data-store-category]").forEach((item) => {
+    item.classList.toggle("active", item.dataset.storeCategory === activeStoreFilter);
+  });
+  storeCategoryPills?.querySelectorAll("[data-store-filter]").forEach((item) => {
+    item.classList.toggle("active", item.dataset.storeFilter === activeStoreFilter);
+  });
+  renderStoreProducts();
+  if (shouldScroll) storeFavorites?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function setHomeGalleryActiveImage(index) {
@@ -2338,19 +2355,13 @@ document.querySelector(".device-browser")?.addEventListener("click", (event) => 
 document.querySelector(".brand-category-nav")?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-store-category]");
   if (!button) return;
-  activeStoreFilter = button.dataset.storeCategory;
-  storeProductLimit = 6;
-  renderStoreProducts();
-  storeFavorites?.scrollIntoView({ behavior: "smooth", block: "start" });
+  setStoreFilter(button.dataset.storeCategory, true);
 });
 
 storeCategoryPills?.addEventListener("click", (event) => {
   const button = event.target.closest("[data-store-filter]");
   if (!button) return;
-  activeStoreFilter = button.dataset.storeFilter;
-  storeProductLimit = 6;
-  storeCategoryPills.querySelectorAll("button").forEach((item) => item.classList.toggle("active", item === button));
-  renderStoreProducts();
+  setStoreFilter(button.dataset.storeFilter);
 });
 
 storeProductGrid?.addEventListener("click", (event) => {
@@ -2377,9 +2388,7 @@ document.querySelector(".cb-track-next")?.addEventListener("click", () => scroll
 document.querySelector("#cbStory")?.addEventListener("click", (event) => {
   const category = event.target.closest("[data-store-category]");
   if (category) {
-    activeStoreFilter = category.dataset.storeCategory;
-    renderStoreProducts();
-    storeFavorites?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setStoreFilter(category.dataset.storeCategory, true);
     return;
   }
   const trigger = event.target.closest("[data-store-detail]");
@@ -2391,9 +2400,7 @@ document.querySelectorAll(".cb-series").forEach((section) => {
   section.addEventListener("click", (event) => {
     const category = event.target.closest("[data-store-category]");
     if (category) {
-      activeStoreFilter = category.dataset.storeCategory;
-      renderStoreProducts();
-      storeFavorites?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setStoreFilter(category.dataset.storeCategory, true);
       return;
     }
     const trigger = event.target.closest("[data-store-detail]");
