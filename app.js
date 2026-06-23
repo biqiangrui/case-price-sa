@@ -378,7 +378,7 @@ let homeGalleryActiveImages = [];
 let homeGalleryActiveIndex = 0;
 let homeGalleryTimer = null;
 let activeStoreFilter = "all";
-let storeProductLimit = 6;
+let storeProductLimit = 10;
 let pageDrag = null;
 let suppressDragClick = false;
 
@@ -2087,23 +2087,32 @@ function homeGalleryCandidates() {
 function storeFilterMatches(item, filter) {
   const text = normalize(`${item.title} ${item.tags.join(" ")} ${productMaterial(item)}`);
   if (filter === "cute") return /卡通|可爱|kt|hello|猫|狗|小熊|动物|图案|diy|ins|cartoon|cute/.test(text);
+  if (filter === "trendy") return /韩系|ins|波点|线条|原创|涂鸦|花|梨|星|粉|绿|蓝|彩色|条纹|trendy/.test(text);
   if (filter === "magsafe") return /magsafe|磁吸/.test(text);
-  if (filter === "heart") return /爱心|情侣|甜|粉|heart|love/.test(text);
-  if (filter === "animal") return /猫|狗|熊|动物|kt|hello|头像|腊肠|小熊/.test(text);
-  if (filter === "iphone17") return /iphone\\s*17|17\\s*pro|max/.test(text);
-  if (filter === "clear") return /透明|clear|亚克力/.test(text);
-  if (filter === "protective") return /防摔|protective|armor|全包/.test(text);
+  if (filter === "iphone17") return /iphone\s*17|17\s*pro|max/.test(text);
+  if (filter === "clear") return /透明|纯色|clear|亚克力|simple|简约|白|银色/.test(text);
+  if (filter === "shockproof") return /防摔|protective|armor|全包|保护|软壳|tpu|硅胶|圆边|按键/.test(text);
+  if (filter === "premium") return /支架|磁吸|皮革|电镀|金属|凯夫拉|商务|premium|高级|黑|墨绿/.test(text);
   if (filter === "fun") return /卡通|花|可爱|链|图案|fun/.test(text);
   return true;
+}
+
+function rankedStoreProducts(filter, limit) {
+  const allItems = [...productDatabase]
+    .filter((item) => item.site === "Trivvo" && item.imageUrl)
+    .sort((a, b) => (parseDate(b.updatedAt)?.getTime() || 0) - (parseDate(a.updatedAt)?.getTime() || 0));
+  if (filter === "all") return allItems.slice(0, limit);
+  const matched = allItems.filter((item) => storeFilterMatches(item, filter));
+  if (matched.length >= limit) return matched.slice(0, limit);
+  const seen = new Set(matched.map((item) => item.id));
+  const fillers = allItems.filter((item) => !seen.has(item.id));
+  return [...matched, ...fillers].slice(0, limit);
 }
 
 function renderStoreProducts() {
   if (!storeProductGrid) return;
   [...storeProductItems.keys()].filter((key) => key.startsWith("store-")).forEach((key) => storeProductItems.delete(key));
-  const items = [...productDatabase]
-    .filter((item) => item.site === "Trivvo" && item.imageUrl && storeFilterMatches(item, activeStoreFilter))
-    .sort((a, b) => (parseDate(b.updatedAt)?.getTime() || 0) - (parseDate(a.updatedAt)?.getTime() || 0))
-    .slice(0, storeProductLimit);
+  const items = rankedStoreProducts(activeStoreFilter, storeProductLimit);
   storeProductGrid.innerHTML = items.map((item) => {
     const key = `store-${item.id}`;
     storeProductItems.set(key, item);
@@ -2173,13 +2182,13 @@ function renderSeriesRow(target, filter, offset = 0) {
 }
 
 function renderSeriesSections() {
-  renderSeriesRow(cbSeriesRowOne, "heart", 0);
+  renderSeriesRow(cbSeriesRowOne, "trendy", 0);
   renderSeriesRow(cbSeriesRowTwo, "magsafe", 2);
 }
 
 function setStoreFilter(filter, shouldScroll = false) {
   activeStoreFilter = filter || "all";
-  storeProductLimit = 6;
+  storeProductLimit = 10;
   document.querySelectorAll("[data-store-category]").forEach((item) => {
     item.classList.toggle("active", item.dataset.storeCategory === activeStoreFilter);
   });
@@ -2410,7 +2419,7 @@ document.querySelectorAll(".cb-series").forEach((section) => {
 });
 
 document.querySelector(".cb-view-more")?.addEventListener("click", () => {
-  storeProductLimit += 6;
+  storeProductLimit += 10;
   renderStoreProducts();
 });
 
